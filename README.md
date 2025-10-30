@@ -8,3 +8,4 @@
 | Paleta de colores | Código hexadecimal | Se realizaron diferentes combinaciones de colores para definir la paleta de colores optima a utilizar. | 23/10/22025 |
 | Mockups funcionales | Figma | Se realizaron mockups con la paleta de colores y funcionalidad para ver como se ve realmente el diseño incluyendo la paleta de colores, logo, iconos e imagenes. | 25/10/22025 |
 | Modulos Organizados por Persona | Clase | El lunes en el horario de clases el equipo se organizo y se hizo el reparto de los modulos. | 27/10/2025 |
+| Base de Datos SQL y Firebase | SQL, Firebase | Se hizo entrega al equipo el script de la Base de Datos tanto en SQL Server como en Firebase. | 30/10/2025 |
