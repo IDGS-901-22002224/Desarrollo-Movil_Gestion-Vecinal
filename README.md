@@ -1,6 +1,6 @@
 # Desarrollo-Movil_Gestion-Vecinal
 
-## Modulo de perfil
+## Modulo de home
 
 | Actividad | Descripcción | Fecha |
 |-----------|--------------|-------|
