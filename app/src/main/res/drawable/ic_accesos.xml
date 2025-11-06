@@ -1,0 +1,23 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Marco de la puerta -->
+    <path
+        android:fillColor="#111827"
+        android:pathData="M5 2h14a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zM6 4v16h12V4H6z" />
+
+    <!-- Perilla de la puerta -->
+    <path
+        android:fillColor="#111827"
+        android:pathData="M15 12.5a0.75 0.75 0 1 1-1.5 0 0.75 0.75 0 0 1 1.5 0z" />
+
+    <!-- Sombra interior para dar efecto de profundidad -->
+    <path
+        android:fillColor="#292D32"
+        android:fillAlpha="0.2"
+        android:pathData="M6 4h6v16H6z" />
+
+</vector>
