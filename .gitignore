@@ -1,0 +1,32 @@
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# En esta carpeta específica, excluir TODOS los .kt...
+app/src/main/java/org/utl/reddeseguridadvecinal/*.kt
+
+# ...PERO INCLUIR solo estos archivos específicos:
+!app/src/main/java/org/utl/reddeseguridadvecinal/Perfil.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/Login.kt
+
+# En la carpeta layout, excluir TODOS los XML...
+app/src/main/res/layout/*.xml
+
+# ...PERO INCLUIR solo estos archivos específicos:
+!app/src/main/res/layout/activity_perfil.xml
+!app/src/main/res/layout/activity_login.xml
+!app/src/main/res/layout/modal_confirmar.xml
+!app/src/main/res/layout/modal_emergencia.xml
+!app/src/main/res/layout/nav_drawer_content.xml
