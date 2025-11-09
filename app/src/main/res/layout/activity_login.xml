@@ -1,237 +1,256 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F5F5"
-    android:fillViewport="true">
+    android:fitsSystemWindows="true">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/main"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="24dp">
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-        <!-- Logo Container con círculo verde claro #10B981 y borde verde oscuro #047857 -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/logoContainer"
-            android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:layout_marginTop="40dp"
-            app:cardBackgroundColor="#10B981"
-            app:cardCornerRadius="80dp"
-            app:cardElevation="0dp"
-            app:strokeColor="#047857"
-            app:strokeWidth="3dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <!-- Aquí va tu logo -->
-            <ImageView
-                android:id="@+id/ivLogo"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="03dp"
-                android:contentDescription="Logo Red de Seguridad Vecinal"
-                android:src="@drawable/logo" />
-
-        </androidx.cardview.widget.CardView>
-
-        <!-- Título "Red de Seguridad Vecinal" - Color verde oscuro #047857, Semi Bold -->
-        <TextView
-            android:id="@+id/tvAppTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/inter_semibold"
-            android:text="Red de Seguridad Vecinal"
-            android:textColor="#047857"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/logoContainer" />
-
-        <!-- "Inicia sesión" - Extra Bold, color texto #111827 -->
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:fontFamily="@font/inter_extrabold"
-            android:text="Inicia sesión"
-            android:textColor="#111827"
-            android:textSize="28sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvAppTitle" />
-
-        <!-- Label "Usuario" - Regular, color texto #111827 -->
-        <TextView
-            android:id="@+id/tvUsuarioLabel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:fontFamily="@font/inter_regular"
-            android:text="Usuario"
-            android:textColor="#111827"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle" />
-
-        <!-- Input Usuario - Fondo gris #E5E7EB, placeholder Extra Light -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cvUsuario"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_marginTop="8dp"
-            app:cardBackgroundColor="#E5E7EB"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvUsuarioLabel">
-
-            <EditText
-                android:id="@+id/etUsuario"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent"
-                android:fontFamily="@font/inter_extralight"
-                android:hint="Ingrese su usuario"
-                android:inputType="text"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:textColor="#111827"
-                android:textColorHint="#9CA3AF"
-                android:textSize="16sp" />
-
-        </androidx.cardview.widget.CardView>
-
-        <!-- Label "Contraseña" - Regular, color texto #111827 -->
-        <TextView
-            android:id="@+id/tvContrasenaLabel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/inter_regular"
-            android:text="Contraseña"
-            android:textColor="#111827"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cvUsuario" />
-
-        <!-- Input Contraseña - Fondo gris #E5E7EB, placeholder Extra Light -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cvContrasena"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_marginTop="8dp"
-            app:cardBackgroundColor="#E5E7EB"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvContrasenaLabel">
-
-            <EditText
-                android:id="@+id/etContrasena"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent"
-                android:fontFamily="@font/inter_extralight"
-                android:hint="Ingrese su contraseña"
-                android:inputType="textPassword"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:textColor="#111827"
-                android:textColorHint="#9CA3AF"
-                android:textSize="16sp" />
-
-        </androidx.cardview.widget.CardView>
-
-        <!-- Botón "Iniciar sesión" - Fondo verde #047857, texto blanco #F5F5F5, Extra Bold -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/btnIniciarSesion"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_marginTop="32dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cvContrasena">
-
-            <!-- Aquí va el gradiente -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/btn_verde_desbanecido"
-                android:fontFamily="@font/inter_extrabold"
-                android:gravity="center"
-                android:text="Iniciar sesión"
-                android:textColor="#F5F5F5"
-                android:textSize="16sp" />
-        </androidx.cardview.widget.CardView>
-
-
-        <!-- Contenedor para "¿Necesitas ayuda?" y "Soporte técnico" -->
         <LinearLayout
-            android:id="@+id/llAyuda"
-            android:layout_width="wrap_content"
+            android:id="@+id/main"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="24dp"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnIniciarSesion">
+            android:orientation="vertical"
+            android:paddingTop="24dp"
+            android:paddingBottom="24dp">
 
-            <!-- "¿Necesitas ayuda?" - Regular, color texto #111827 -->
-            <TextView
-                android:id="@+id/tvNecesitasAyuda"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/inter_regular"
-                android:text="¿Necesitas ayuda?  "
-                android:textColor="#111827"
-                android:textSize="14sp" />
-
-            <!-- "Soporte técnico" - Italic, color azul #3B82F6, con underline -->
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:paddingTop="15dp"
+                android:paddingBottom="24dp">
 
+                <!-- Logo Container -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/logoContainer"
+                    android:layout_width="160dp"
+                    android:layout_height="160dp"
+                    android:layout_marginTop="40dp"
+                    app:cardBackgroundColor="#10B981"
+                    app:cardCornerRadius="80dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="#047857"
+                    app:strokeWidth="3dp">
+
+                    <ImageView
+                        android:id="@+id/ivLogo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="03dp"
+                        android:contentDescription="Logo Red de Seguridad Vecinal"
+                        android:src="@drawable/logo" />
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Título -->
                 <TextView
-                    android:id="@+id/tvSoporteTecnico"
+                    android:id="@+id/tvAppTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:fontFamily="@font/inter_italic"
-                    android:text="Soporte técnico"
-                    android:textColor="#3B82F6"
-                    android:textSize="14sp" />
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/inter_semibold"
+                    android:text="Red de Seguridad Vecinal"
+                    android:textColor="#047857"
+                    android:textSize="16sp" />
 
-                <!-- Underline azul #3B82F6 -->
-                <View
+                <!-- "Inicia sesión" -->
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:fontFamily="@font/inter_extrabold"
+                    android:text="Inicia sesión"
+                    android:textColor="#111827"
+                    android:textSize="28sp" />
+
+                <!-- Contenedor para los campos -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/formContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#3B82F6" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginTop="32dp">
+
+                    <TextView
+                        android:id="@+id/tvUsuarioLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="Usuario"
+                        android:textColor="#111827"
+                        android:textSize="14sp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cvUsuario"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="8dp"
+                        app:cardBackgroundColor="#E5E7EB"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="0dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvUsuarioLabel">
+
+                        <EditText
+                            android:id="@+id/etUsuario"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/transparent"
+                            android:fontFamily="@font/inter_extralight"
+                            android:hint="Ingrese su usuario"
+                            android:inputType="text"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp"
+                            android:textColor="#111827"
+                            android:textColorHint="#9CA3AF"
+                            android:textSize="16sp" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/tvContrasenaLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="Contraseña"
+                        android:textColor="#111827"
+                        android:textSize="14sp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/cvUsuario" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cvContrasena"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="8dp"
+                        app:cardBackgroundColor="#E5E7EB"
+                        app:cardCornerRadius="8dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        app:cardElevation="0dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvContrasenaLabel">
+
+                        <EditText
+                            android:id="@+id/etContrasena"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/transparent"
+                            android:fontFamily="@font/inter_extralight"
+                            android:hint="Ingrese su contraseña"
+                            android:inputType="textPassword"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp"
+                            android:textColor="#111827"
+                            android:textColorHint="#9CA3AF"
+                            android:textSize="16sp" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/btnIniciarSesion"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="32dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        app:cardBackgroundColor="@android:color/transparent"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="0dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/cvContrasena"
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/btn_verde_desbanecido"
+                            android:fontFamily="@font/inter_extrabold"
+                            android:gravity="center"
+                            android:text="Iniciar sesión"
+                            android:textColor="#F5F5F5"
+                            android:textSize="16sp" />
+                    </androidx.cardview.widget.CardView>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Contenedor para ayuda -->
+                <LinearLayout
+                    android:id="@+id/llAyuda"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="24dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvNecesitasAyuda"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="¿Necesitas ayuda?  "
+                        android:textColor="#111827"
+                        android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvSoporteTecnico"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:fontFamily="@font/inter_italic"
+                            android:text="Soporte técnico"
+                            android:textColor="#3B82F6"
+                            android:textSize="14sp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="#3B82F6" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
             </LinearLayout>
 
         </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
