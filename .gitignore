@@ -36,6 +36,7 @@ app/src/main/res/layout/*.xml
 !app/src/main/res/layout/activity_historial_servicios.xml
 !app/src/main/res/layout/activity_historial_recinto.xml
 !app/src/main/res/layout/modal_confirmar.xml
+!app/src/main/res/layout/modal_error.xml
 !app/src/main/res/layout/modal_incoveniente.xml
 !app/src/main/res/layout/modal_emergencia.xml
 !app/src/main/res/layout/nav_drawer_content.xml
