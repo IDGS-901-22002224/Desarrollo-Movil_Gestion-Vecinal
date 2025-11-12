@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:padding="24dp">
 
-        <!-- Icono de emergencia (octágono) -->
+        <!-- Icono de emergencia -->
         <ImageView
             android:id="@+id/ivIconoEmergencia"
             android:layout_width="60dp"
@@ -27,7 +27,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:tint="#EF4444" />
 
-        <!-- Título "EMERGENCIA" -->
+        <!-- Titulo -->
         <TextView
             android:id="@+id/tvTituloEmergencia"
             android:layout_width="wrap_content"
@@ -41,7 +41,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ivIconoEmergencia" />
 
-        <!-- Mensaje principal (variable) -->
         <TextView
             android:id="@+id/tvMensajePrincipal"
             android:layout_width="0dp"
@@ -56,7 +55,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTituloEmergencia" />
 
-        <!-- Mensaje secundario (variable) -->
         <TextView
             android:id="@+id/tvMensajeSecundario"
             android:layout_width="0dp"
@@ -71,7 +69,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvMensajePrincipal" />
 
-        <!-- Contenedor de botones -->
+        <!-- botones -->
         <LinearLayout
             android:id="@+id/llBotones"
             android:layout_width="wrap_content"
@@ -83,7 +81,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvMensajeSecundario">
 
-            <!-- Botón Confirmar (Rojo) -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/btnConfirmar"
                 android:layout_width="wrap_content"
@@ -109,7 +106,6 @@
 
             </androidx.cardview.widget.CardView>
 
-            <!-- Botón Cancelar (Gris) -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/btnCancelar"
                 android:layout_width="wrap_content"

@@ -27,7 +27,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:tint="#FBBF24" />
 
-        <!-- Título "ALERTA" -->
+        <!-- Titulo -->
         <TextView
             android:id="@+id/tvTituloAlerta"
             android:layout_width="wrap_content"
@@ -41,7 +41,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ivIconoAlerta" />
 
-        <!-- Mensaje principal (variable) -->
         <TextView
             android:id="@+id/tvMensajePrincipal"
             android:layout_width="0dp"
@@ -56,7 +55,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTituloAlerta" />
 
-        <!-- Mensaje secundario (variable) -->
         <TextView
             android:id="@+id/tvMensajeSecundario"
             android:layout_width="0dp"
@@ -71,7 +69,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvMensajePrincipal" />
 
-        <!-- Contenedor de botones -->
+        <!-- botones -->
         <LinearLayout
             android:id="@+id/llBotones"
             android:layout_width="wrap_content"
@@ -83,12 +81,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvMensajeSecundario">
 
-            <!-- Botón Confirmar (Amarillo) -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/btnConfirmar"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="3dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
@@ -101,20 +98,19 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/inter_regular"
                     android:gravity="center"
-                    android:paddingStart="28dp"
-                    android:paddingEnd="28dp"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
                     android:text="Confirmar"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp" />
 
             </androidx.cardview.widget.CardView>
 
-            <!-- Botón Cancelar (Gris) -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/btnCancelar"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="3dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
@@ -127,8 +123,8 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/inter_regular"
                     android:gravity="center"
-                    android:paddingStart="28dp"
-                    android:paddingEnd="28dp"
+                    android:paddingStart="25dp"
+                    android:paddingEnd="25dp"
                     android:text="Cancelar"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp" />

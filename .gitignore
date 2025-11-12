@@ -20,6 +20,9 @@ app/src/main/java/org/utl/reddeseguridadvecinal/*.kt
 # ...PERO INCLUIR solo estos archivos específicos:
 !app/src/main/java/org/utl/reddeseguridadvecinal/Home.kt
 
+# Excluir  LoginController
+app/src/main/java/org/utl/reddeseguridadvecinal/controller/LoginController.kt
+
 # En la carpeta layout, excluir TODOS los XML...
 app/src/main/res/layout/*.xml
 

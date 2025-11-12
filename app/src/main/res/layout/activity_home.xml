@@ -12,7 +12,7 @@
         android:background="#F5F5F5"
         android:fitsSystemWindows="true">
 
-        <!-- Header con fondo blanco -->
+        <!-- Header -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cvHeader"
             android:layout_width="0dp"
@@ -32,7 +32,7 @@
                 android:paddingTop="8dp"
                 android:paddingBottom="20dp">
 
-                <!-- Botón menú hamburguesa -->
+                <!-- Boton menu -->
                 <ImageButton
                     android:id="@+id/btnMenu"
                     android:layout_width="48dp"
@@ -46,7 +46,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <!-- Saludo "Hola Nombre Usuario" -->
+                <!-- Saludo al usuario" -->
                 <LinearLayout
                     android:id="@+id/llSaludo"
                     android:layout_width="0dp"
@@ -82,7 +82,7 @@
 
         </androidx.cardview.widget.CardView>
 
-        <!-- ScrollView con el contenido -->
+
         <ScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -100,7 +100,6 @@
                 android:paddingTop="24dp"
                 android:paddingBottom="24dp">
 
-                <!-- Grid de botones con márgenes ajustados -->
                 <GridLayout
                     android:id="@+id/gridBotones"
                     android:layout_width="0dp"
@@ -113,7 +112,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <!-- Botón Reportes -->
                     <androidx.cardview.widget.CardView
                         android:id="@+id/btnReportes"
                         android:layout_width="0dp"
@@ -166,7 +164,6 @@
 
                     </androidx.cardview.widget.CardView>
 
-                    <!-- Botón Accesos -->
                     <androidx.cardview.widget.CardView
                         android:id="@+id/btnAccesos"
                         android:layout_width="0dp"
@@ -219,7 +216,6 @@
 
                     </androidx.cardview.widget.CardView>
 
-                    <!-- Botón Chat vecinal -->
                     <androidx.cardview.widget.CardView
                         android:id="@+id/btnChat"
                         android:layout_width="0dp"
@@ -272,7 +268,6 @@
 
                     </androidx.cardview.widget.CardView>
 
-                    <!-- Botón Mapa -->
                     <androidx.cardview.widget.CardView
                         android:id="@+id/btnMapa"
                         android:layout_width="0dp"
@@ -325,7 +320,6 @@
 
                     </androidx.cardview.widget.CardView>
 
-                    <!-- Botón Servicios -->
                     <androidx.cardview.widget.CardView
                         android:id="@+id/btnServicios"
                         android:layout_width="0dp"
@@ -378,7 +372,6 @@
 
                     </androidx.cardview.widget.CardView>
 
-                    <!-- Botón Avisos -->
                     <androidx.cardview.widget.CardView
                         android:id="@+id/btnAvisos"
                         android:layout_width="0dp"
@@ -433,12 +426,11 @@
 
                 </GridLayout>
 
-                <!-- Botón Emergencia -->
                 <androidx.cardview.widget.CardView
                     android:id="@+id/btnEmergencia"
                     android:layout_width="0dp"
                     android:layout_height="75dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="30dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
