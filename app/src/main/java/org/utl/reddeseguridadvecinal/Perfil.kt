@@ -29,7 +29,7 @@ class Perfil : AppCompatActivity() {
     private lateinit var drawerLayout: DrawerLayout
     private var selectableItemBackground: Drawable? = null
 
-    // Colores del menú lateral
+    // Colores del menu lateral
     private val COLOR_ACTIVE_BG = Color.parseColor("#F0FDF4")
     private val COLOR_INACTIVE_BG = Color.WHITE
     private val COLOR_ACTIVE_TEXT = Color.parseColor("#047857")
@@ -62,12 +62,7 @@ class Perfil : AppCompatActivity() {
         setupDrawerItemListeners()
         highlightActiveMenuItem(R.id.llPerfilMenu)
 
-//        val btnCancelar = findViewById<CardView>(R.id.btnCancelar)
-//        btnCancelar.setOnClickListener {
-//            finish() // Solo cierra esta actividad
-//        }
 
-        // Control del botón físico de retroceso
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -79,8 +74,6 @@ class Perfil : AppCompatActivity() {
             }
         })
     }
-
-    // --- MÉTODOS DEL MENÚ LATERAL ---
 
     private fun setupDrawerMenuButton() {
         val btnMenu = findViewById<ImageButton>(R.id.btnMenu)
@@ -157,7 +150,7 @@ class Perfil : AppCompatActivity() {
         }
     }
 
-    // --- FUNCIÓN PARA OCULTAR TECLADO ---
+    // --- OCULTAR TECLADO ---
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         if (currentFocus != null) {
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

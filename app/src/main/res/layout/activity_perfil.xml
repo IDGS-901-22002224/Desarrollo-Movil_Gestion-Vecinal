@@ -12,7 +12,7 @@
         android:background="#F5F5F5"
         android:fitsSystemWindows="true" >
 
-        <!-- Header con fondo blanco -->
+        <!-- Header -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cvHeader"
             android:layout_width="0dp"
@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:padding="16dp">
 
-                <!-- Botón Menú -->
+                <!-- Boton Menu -->
                 <ImageButton
                     android:id="@+id/btnMenu"
                     android:layout_width="48dp"
@@ -43,7 +43,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <!-- Título -->
+                <!-- Titulo -->
                 <TextView
                     android:id="@+id/tvTitulo"
                     android:layout_width="0dp"
@@ -63,7 +63,7 @@
 
         </androidx.cardview.widget.CardView>
 
-        <!-- ScrollView con el contenido -->
+
         <ScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -78,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:padding="24dp">
 
-                <!-- Contenedor blanco con el formulario -->
+                <!-- formulario -->
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cvFormulario"
                     android:layout_width="0dp"
@@ -96,7 +96,6 @@
                         android:orientation="vertical"
                         android:padding="24dp">
 
-                        <!-- Campo Nombre -->
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -129,7 +128,6 @@
 
                         </androidx.cardview.widget.CardView>
 
-                        <!-- Campo Apellidos -->
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -163,7 +161,6 @@
 
                         </androidx.cardview.widget.CardView>
 
-                        <!-- Campo Contraseña -->
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -197,7 +194,6 @@
 
                         </androidx.cardview.widget.CardView>
 
-                        <!-- Campo Tarjeta -->
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -232,7 +228,6 @@
 
                         </androidx.cardview.widget.CardView>
 
-                        <!-- Campo Número seguro -->
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -267,7 +262,6 @@
 
                         </androidx.cardview.widget.CardView>
 
-                        <!-- Campo Fecha de vencimiento -->
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -378,7 +372,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Menú lateral -->
+    <!-- Menu  -->
     <include layout="@layout/nav_drawer_content" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

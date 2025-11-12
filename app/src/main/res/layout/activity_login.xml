@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="24dp"
+            android:paddingTop="10dp"
             android:paddingBottom="24dp">
 
             <LinearLayout
@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center_horizontal"
-                android:paddingTop="15dp"
+                android:paddingTop="10dp"
                 android:paddingBottom="24dp">
 
                 <!-- Logo Container -->
@@ -52,7 +52,7 @@
 
                 </androidx.cardview.widget.CardView>
 
-                <!-- Título -->
+                <!-- Titulo -->
                 <TextView
                     android:id="@+id/tvAppTitle"
                     android:layout_width="wrap_content"
@@ -63,7 +63,6 @@
                     android:textColor="#047857"
                     android:textSize="16sp" />
 
-                <!-- "Inicia sesión" -->
                 <TextView
                     android:id="@+id/tvTitle"
                     android:layout_width="wrap_content"
@@ -74,7 +73,7 @@
                     android:textColor="#111827"
                     android:textSize="28sp" />
 
-                <!-- Contenedor para los campos -->
+                <!-- Contenedor de los campos -->
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/formContainer"
                     android:layout_width="match_parent"
@@ -203,7 +202,7 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <!-- Contenedor para ayuda -->
+                <!-- ayuda -->
                 <LinearLayout
                     android:id="@+id/llAyuda"
                     android:layout_width="wrap_content"
