@@ -111,8 +111,6 @@ class Login : AppCompatActivity() {
 
     private fun setupLoginButton() {
         val btnLogin = findViewById<CardView>(R.id.btnIniciarSesion)
-
-        // INICIALIZAR SessionManager
         val sessionManager = SessionManager(this)
 
         btnLogin.setOnClickListener {
@@ -124,16 +122,24 @@ class Login : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Mostrar loading
             btnLogin.isEnabled = false
 
             lifecycleScope.launch {
-                // println("Intentando login solo con API")
-
                 val usuario = loginController.loginUser(email, password)
 
                 if (usuario != null) {
-                    // SI SALE BIEN - GUARDAR SESION
+                    // verificacion de que no sea guardia
+                    if (usuario.tipoUsuario.equals("Guardia", ignoreCase = true)) {
+                        Toast.makeText(
+                            this@Login,
+                            "Acceso restringido: Los guardias no pueden acceder a la aplicación móvil",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        btnLogin.isEnabled = true
+                        return@launch
+                    }
+
+                    // SI NO ES GUARDIA - GUARDAR SESION
                     sessionManager.saveUserSession(
                         userId = usuario.id,
                         userName = usuario.nombre,
@@ -146,7 +152,6 @@ class Login : AppCompatActivity() {
                     )
 
                     val apellidos = "${usuario.apellidoP} ${usuario.apellidoM}".trim()
-                    //println(" Login exitoso: $apellidos")
                     Toast.makeText(this@Login, "Bienvenido $apellidos", Toast.LENGTH_SHORT).show()
 
                     val intent = Intent(this@Login, Home::class.java).apply {
@@ -155,18 +160,15 @@ class Login : AppCompatActivity() {
                     startActivity(intent)
                     finish()
                 } else {
-                   // println("Error: Credenciales invAlidas en la API")
+                    // MENSAJE ESPECÍFICO PARA GUARDIAS
                     Toast.makeText(
                         this@Login,
-                        "Error: Credenciales incorrectas o problema con el servidor",
+                        "Error: Credenciales incorrectas o acceso no autorizado",
                         Toast.LENGTH_LONG
                     ).show()
-
-                    // Mensaje especifico
                     showAuthError()
                 }
 
-                // Volver a activar el boton
                 btnLogin.isEnabled = true
             }
         }
