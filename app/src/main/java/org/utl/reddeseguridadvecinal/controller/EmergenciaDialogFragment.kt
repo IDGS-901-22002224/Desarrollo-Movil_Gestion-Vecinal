@@ -1,4 +1,3 @@
-
 package org.utl.reddeseguridadvecinal.dialogs
 
 import android.app.Dialog
@@ -13,15 +12,15 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.DialogFragment
 import org.utl.reddeseguridadvecinal.R
 
-class ConfirmDialogFragment : DialogFragment() {
+class EmergenciaDialogFragment : DialogFragment() {
 
-    private lateinit var tvTituloAlerta: TextView
+    private lateinit var tvTituloEmergencia: TextView
     private lateinit var tvMensajePrincipal: TextView
     private lateinit var tvMensajeSecundario: TextView
     private lateinit var btnConfirmar: CardView
     private lateinit var btnCancelar: CardView
 
-    private var titulo: String = "ALERTA"
+    private var titulo: String = "EMERGENCIA"
     private var mensajePrincipal: String = ""
     private var mensajeSecundario: String = ""
     private var textoBotonConfirmar: String = "Confirmar"
@@ -30,14 +29,14 @@ class ConfirmDialogFragment : DialogFragment() {
 
     companion object {
         fun newInstance(
-            titulo: String = "ALERTA",
+            titulo: String = "EMERGENCIA",
             mensajePrincipal: String,
             mensajeSecundario: String = "",
             textoBotonConfirmar: String = "Confirmar",
             textoBotonCancelar: String = "Cancelar",
             onConfirm: (() -> Unit)? = null
-        ): ConfirmDialogFragment {
-            return ConfirmDialogFragment().apply {
+        ): EmergenciaDialogFragment {
+            return EmergenciaDialogFragment().apply {
                 this.titulo = titulo
                 this.mensajePrincipal = mensajePrincipal
                 this.mensajeSecundario = mensajeSecundario
@@ -53,14 +52,14 @@ class ConfirmDialogFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.modal_confirmar, container, false)
+        return inflater.inflate(R.layout.modal_emergencia, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         // Enlazar vistas
-        tvTituloAlerta = view.findViewById(R.id.tvTituloAlerta)
+        tvTituloEmergencia = view.findViewById(R.id.tvTituloEmergencia)
         tvMensajePrincipal = view.findViewById(R.id.tvMensajePrincipal)
         tvMensajeSecundario = view.findViewById(R.id.tvMensajeSecundario)
         btnConfirmar = view.findViewById(R.id.btnConfirmar)
@@ -72,7 +71,7 @@ class ConfirmDialogFragment : DialogFragment() {
     }
 
     private fun setupTexts() {
-        tvTituloAlerta.text = titulo
+        tvTituloEmergencia.text = titulo
         tvMensajePrincipal.text = mensajePrincipal
 
         if (mensajeSecundario.isNotEmpty()) {
