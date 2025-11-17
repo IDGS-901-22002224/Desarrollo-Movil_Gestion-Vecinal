@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:padding="24dp">
 
-        <!-- Contenedor circular de fondo verde claro -->
+        <!-- Circulo verde claro -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cvCirculoFondo"
             android:layout_width="120dp"
@@ -27,7 +27,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <!-- ImageView centrado dentro del círculo -->
+            <!-- Imagen logo-->
             <ImageView
                 android:id="@+id/ivIconoCasitas"
                 android:layout_width="115dp"
@@ -40,7 +40,7 @@
 
         </androidx.cardview.widget.CardView>
 
-        <!-- Título "Red de Seguridad Vecinal" -->
+        <!-- Titulo -->
         <TextView
             android:id="@+id/tvTitulo"
             android:layout_width="wrap_content"
@@ -50,11 +50,11 @@
             android:text="Red de Seguridad Vecinal"
             android:textColor="#047857"
             android:textSize="18sp"
+            android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cvCirculoFondo" />
 
-        <!-- Mensaje de disculpa -->
         <TextView
             android:id="@+id/tvMensaje"
             android:layout_width="0dp"
@@ -69,7 +69,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTitulo" />
 
-        <!-- Botón Continuar con degradado verde -->
+        <!-- Boton -->
         <androidx.cardview.widget.CardView
             android:id="@+id/btnContinuar"
             android:layout_width="wrap_content"

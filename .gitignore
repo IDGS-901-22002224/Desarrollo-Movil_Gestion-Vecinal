@@ -14,19 +14,32 @@
 .cxx
 local.properties
 
-# En esta carpeta específica, excluir TODOS los .kt...
+app/google-services.json
+
+# # excluir todos los .kt de la carpeta
 app/src/main/java/org/utl/reddeseguridadvecinal/*.kt
 
-# ...PERO INCLUIR solo estos archivos específicos:
+# solo se suben estos .kt
 !app/src/main/java/org/utl/reddeseguridadvecinal/Avisos_vecinales.kt
 
-# En la carpeta layout, excluir TODOS los XML...
+# # excluir todos los .xml de la carpeta
 app/src/main/res/layout/*.xml
 
-# ...PERO INCLUIR solo estos archivos específicos:
+# solo se suben estos .xml
 !app/src/main/res/layout/activity_avisos_vecinales.xml
+!app/src/main/res/layout/item_aviso.xml
 !app/src/main/res/layout/modal_confirmar.xml
 !app/src/main/res/layout/modal_error.xml
 !app/src/main/res/layout/modal_incoveniente.xml
 !app/src/main/res/layout/modal_emergencia.xml
 !app/src/main/res/layout/nav_drawer_content.xml
+
+# Solo se suben estos archivos de la carpeta
+app/src/main/java/org/utl/reddeseguridadvecinal/controller/*.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/AvisosController.kt
+
+# Solo se suben estos archivos de la carpeta
+app/src/main/java/org/utl/reddeseguridadvecinal/modelo/*.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/Aviso.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/ApiResponse.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/Aviso.kt
