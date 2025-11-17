@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "251463466937",
+    "firebase_url": "https://red-seguridad-vecinal-default-rtdb.firebaseio.com",
+    "project_id": "red-seguridad-vecinal",
+    "storage_bucket": "red-seguridad-vecinal.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:251463466937:android:53316adccd9504377d0068",
+        "android_client_info": {
+          "package_name": "org.utl.reddeseguridadvecinal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBm-rqqK6Tn9hiiN7RPfp-N2YL51LlI22k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
