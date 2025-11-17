@@ -16,4 +16,7 @@
 | Diseño de login y perfil | Android Studio | Se desarrollo el diseño de los modulos de login y perfil junto con su menu, modal de confirmaciónn y modal de incovenientes. | 03/11/22025 |
 | Diseño de servicios y submodulos | Android Studio | Se desarrollo el diseño des modulo de servicios junto con sus submodulos como lo son historial de recuntos y solicitud de estos mismo, historial de servicios y solicitud de servicios, pagos, menu, modales de confirmación y errores. | 04/11/22025 |
 | Cambio de diseño | Android Studio | Se reazlizaron cambios de diseño de todos los modulos de la aplicación ademas de agregar la funcionalidad del menu y se agregaron diseños de modales. | 07/11/22025 |
-| Funcionalidad del Login y Home | Android Studio | Se realizo la programación de la funcionalidad para los modulos de login y de home consumiendo la API necesaria asi como tambien dandole vlaores a los modales a utilizar. | 11/11/22025 |
+| Funcionalidad del Login y Home | Android Studio | Se realizo una parte de la programación de la funcionalidad para los modulos de login y de home consumiendo la API necesaria asi como tambien dandole valores a los modales a utilizar. | 11/11/22025 |
+| Funcionalidad completa del login y del perfil | Android Studio | Se realizaron los modulos completos de manera funcional junto con los modales necesarios. | 13/11/22025 |
+| Funcionalidad completa de avisos | Android Studio | Se realizo el modulo completo de avisos junto con los modales necesarios. | 14/11/22025 |
+| Funcionalidad completa de home | Android Studio | Se realizo el modulo completo de home y su alerta de panico junto con los modales necesarios. | 15/11/22025 |
