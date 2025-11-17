@@ -123,8 +123,8 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/inter_regular"
                     android:gravity="center"
-                    android:paddingStart="25dp"
-                    android:paddingEnd="25dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
                     android:text="Cancelar"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp" />

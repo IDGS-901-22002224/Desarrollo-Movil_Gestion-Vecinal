@@ -82,7 +82,7 @@ class ConfirmDialogFragment : DialogFragment() {
             tvMensajeSecundario.visibility = View.GONE
         }
 
-        // Configurar textos de botones
+        // textos de botones
         (btnConfirmar.getChildAt(0) as? TextView)?.text = textoBotonConfirmar
         (btnCancelar.getChildAt(0) as? TextView)?.text = textoBotonCancelar
     }
