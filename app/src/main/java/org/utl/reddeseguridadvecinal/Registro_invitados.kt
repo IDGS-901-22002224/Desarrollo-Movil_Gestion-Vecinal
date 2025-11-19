@@ -1,5 +1,6 @@
 package org.utl.reddeseguridadvecinal
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
@@ -12,20 +13,42 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.core.view.GravityCompat
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import org.utl.reddeseguridadvecinal.controller.AccesosController
+import org.utl.reddeseguridadvecinal.modelo.InvitadoRequest
+import org.utl.reddeseguridadvecinal.util.SessionManager
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class Registro_invitados : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
+
+
+    private lateinit var etNombre: EditText
+    private lateinit var etApellidoPaterno: EditText
+    private lateinit var etApellidoMaterno: EditText
+    private lateinit var etDomicilio: EditText
+    private lateinit var etFecha: EditText
+    private lateinit var btnGuardar: CardView
+
+    private lateinit var sessionManager: SessionManager
+    private val accesosController = AccesosController()
+    private var userId: Int = -1
+
+    private var fechaSeleccionadaAPI: String = ""
 
     private val COLOR_ACTIVE_BG = Color.parseColor("#F0FDF4")
     private val COLOR_INACTIVE_BG = Color.WHITE
@@ -45,6 +68,12 @@ class Registro_invitados : AppCompatActivity() {
         setupStatusBar()
         setContentView(R.layout.activity_registro_invitados)
 
+        sessionManager = SessionManager(this)
+        userId = sessionManager.getUserId()
+
+        initViews()
+        setupFormLogic()
+
         drawerLayout = findViewById(R.id.drawer_layout)
         val typedArray = obtainStyledAttributes(intArrayOf(android.R.attr.selectableItemBackground))
         selectableItemBackground = typedArray.getDrawable(0)
@@ -59,17 +88,7 @@ class Registro_invitados : AppCompatActivity() {
 
         setupDrawerMenuButton()
         setupDrawerItemListeners()
-
-        val btnGuardar = findViewById<CardView>(R.id.btnGuardar)
-        btnGuardar.setOnClickListener {
-            drawerLayout.closeDrawer(GravityCompat.START)
-        }
-
-        val btnCancelar = findViewById<CardView>(R.id.btnCancelar)
-        btnCancelar.setOnClickListener {
-            finish()
-        }
-
+        setupDrawerHeader()
         highlightActiveMenuItem(R.id.llAccesosMenu)
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
@@ -82,6 +101,94 @@ class Registro_invitados : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun initViews() {
+        etNombre = findViewById(R.id.etNombre)
+        etApellidoPaterno = findViewById(R.id.etApellidoPaterno)
+        etApellidoMaterno = findViewById(R.id.etApellidoMaterno)
+        etDomicilio = findViewById(R.id.etDomicilio)
+        etFecha = findViewById(R.id.etFecha)
+        btnGuardar = findViewById(R.id.btnGuardar)
+
+        val btnCancelar = findViewById<CardView>(R.id.btnCancelar)
+        btnCancelar.setOnClickListener { finish() }
+    }
+
+    private fun setupFormLogic() {
+        etDomicilio.setText(sessionManager.getDireccionCompleta())
+        etDomicilio.isEnabled = false
+        etFecha.setOnClickListener {
+            mostrarDatePicker()
+        }
+
+        btnGuardar.setOnClickListener {
+            guardarInvitado()
+        }
+    }
+
+    private fun mostrarDatePicker() {
+        val calendario = Calendar.getInstance()
+        val anio = calendario.get(Calendar.YEAR)
+        val mes = calendario.get(Calendar.MONTH)
+        val dia = calendario.get(Calendar.DAY_OF_MONTH)
+
+        val datePicker = DatePickerDialog(this, { _, year, month, dayOfMonth ->
+            val mesReal = month + 1
+            val fechaMostrar = String.format("%02d/%02d/%04d", dayOfMonth, mesReal, year)
+            etFecha.setText(fechaMostrar)
+            fechaSeleccionadaAPI = String.format("%04d-%02d-%02dT23:59:59", year, mesReal, dayOfMonth)
+
+        }, anio, mes, dia)
+
+        datePicker.datePicker.minDate = System.currentTimeMillis() - 1000
+        datePicker.show()
+    }
+    private fun guardarInvitado() {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        currentFocus?.let { imm.hideSoftInputFromWindow(it.windowToken, 0) }
+
+        val nombre = etNombre.text.toString().trim()
+        val paterno = etApellidoPaterno.text.toString().trim()
+        val materno = etApellidoMaterno.text.toString().trim()
+
+        if (nombre.isEmpty() || paterno.isEmpty() || fechaSeleccionadaAPI.isEmpty()) {
+            Toast.makeText(this, "Por favor completa nombre, apellido paterno y fecha", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val request = InvitadoRequest(
+            usuarioID = userId,
+            nombreInvitado = nombre,
+            apellidoPaternoInvitado = paterno,
+            apellidoMaternoInvitado = materno,
+            fechaVencimiento = fechaSeleccionadaAPI
+        )
+
+        btnGuardar.isEnabled = false
+        lifecycleScope.launch {
+            val exito = accesosController.crearInvitado(request)
+
+            if (exito) {
+                Toast.makeText(this@Registro_invitados, "Invitación creada exitosamente", Toast.LENGTH_LONG).show()
+                finish()
+            } else {
+                Toast.makeText(this@Registro_invitados, "Error al crear invitación", Toast.LENGTH_LONG).show()
+                btnGuardar.isEnabled = true
+            }
+        }
+    }
+    private fun setupDrawerHeader() {
+        val tvDrawerName = findViewById<TextView>(R.id.tvDrawerUserName)
+        val tvDrawerAddress = findViewById<TextView>(R.id.tvDrawerUserAddress)
+        val apellidos = sessionManager.getApellidosCompletos()
+        val direccion = sessionManager.getDireccionCompleta()
+        if (apellidos.isNotEmpty()) {
+            tvDrawerName.text = apellidos
+        } else {
+            tvDrawerName.text = "Usuario"
+        }
+        tvDrawerAddress.text = direccion
     }
 
     private fun setupDrawerMenuButton() {
@@ -132,23 +239,33 @@ class Registro_invitados : AppCompatActivity() {
         val llPerfil = findViewById<LinearLayout>(R.id.llPerfilMenu)
         val llCerrarSesion = findViewById<LinearLayout>(R.id.llCerrarSesion)
 
+        fun navigateAndHighlight(targetActivity: Class<*>, activeLayoutId: Int) {
+            highlightActiveMenuItem(activeLayoutId)
+            drawerLayout.closeDrawer(GravityCompat.START)
+            if (targetActivity != Registro_invitados::class.java) {
+                startActivity(Intent(this, targetActivity))
+                finish()
+            }
+        }
+
         fun navigateAndFinish(target: Class<*>) {
             drawerLayout.closeDrawer(GravityCompat.START)
             startActivity(Intent(this, target))
             finish()
         }
 
-        llInicio.setOnClickListener { navigateAndFinish(Home::class.java) }
-        llReportes.setOnClickListener { navigateAndFinish(Reportes::class.java) }
-        llAccesos.setOnClickListener { navigateAndFinish(Acceso::class.java) }
-        llChat.setOnClickListener { navigateAndFinish(Chat_vecinal::class.java) }
-        llMapa.setOnClickListener { navigateAndFinish(Mapa::class.java) }
-        llServicios.setOnClickListener { navigateAndFinish(Pagos_Servicios::class.java) }
-        llAvisos.setOnClickListener { navigateAndFinish(Avisos_vecinales::class.java) }
-        llPerfil.setOnClickListener { navigateAndFinish(Perfil::class.java) }
+        llInicio.setOnClickListener { navigateAndHighlight(Home::class.java, R.id.llInicio) }
+        llReportes.setOnClickListener { navigateAndHighlight(Reportes::class.java, R.id.llReportesMenu) }
+        llAccesos.setOnClickListener { navigateAndHighlight(Acceso::class.java, R.id.llAccesosMenu) }
+        llChat.setOnClickListener { navigateAndHighlight(Chat_vecinal::class.java, R.id.llChatMenu) }
+        llMapa.setOnClickListener { navigateAndHighlight(Mapa::class.java, R.id.llMapaMenu) }
+        llServicios.setOnClickListener { navigateAndHighlight(Pagos_Servicios::class.java, R.id.llServiciosMenu) }
+        llAvisos.setOnClickListener { navigateAndHighlight(Avisos_vecinales::class.java, R.id.llAvisosMenu) }
+        llPerfil.setOnClickListener { navigateAndHighlight(Perfil::class.java, R.id.llPerfilMenu) }
 
         llCerrarSesion.setOnClickListener {
             drawerLayout.closeDrawer(GravityCompat.START)
+            sessionManager.clearSession()
             val intent = Intent(this, Login::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
@@ -157,7 +274,6 @@ class Registro_invitados : AppCompatActivity() {
         }
     }
 
-    // ✅ Ocultar teclado al tocar fuera de los EditText
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         if (currentFocus != null) {
             val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager

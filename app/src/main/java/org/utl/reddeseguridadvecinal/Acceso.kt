@@ -6,28 +6,41 @@ import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView // ¡Importar CardView!
+import androidx.cardview.widget.CardView
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import org.utl.reddeseguridadvecinal.controller.AccesosController
+import org.utl.reddeseguridadvecinal.util.QRGenerator // 🔥 Nuestra utilidad
+import org.utl.reddeseguridadvecinal.util.SessionManager
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class Acceso : AppCompatActivity() {
 
     private lateinit var drawerLayout: androidx.drawerlayout.widget.DrawerLayout
     private var selectableItemBackground: Drawable? = null
-
-    // Colores iguales a Home/Reportes
+    private lateinit var ivQrCode: ImageView
+    private lateinit var tvLabelNombre: TextView
+    private lateinit var tvCasa: TextView
+    private lateinit var tvValidoHasta: TextView
+    private lateinit var sessionManager: SessionManager
+    private val accesosController = AccesosController()
+    private var usuarioId: Int = -1
     private val COLOR_ACTIVE_BG = Color.parseColor("#F0FDF4")
     private val COLOR_INACTIVE_BG = Color.WHITE
     private val COLOR_ACTIVE_TEXT = Color.parseColor("#047857")
     private val COLOR_INACTIVE_TEXT = Color.parseColor("#111827")
-
     private val menuItemsToHighlight = listOf(
         R.id.llInicio, R.id.llReportesMenu, R.id.llAccesosMenu, R.id.llChatMenu,
         R.id.llMapaMenu, R.id.llServiciosMenu, R.id.llAvisosMenu, R.id.llPerfilMenu
@@ -38,36 +51,33 @@ class Acceso : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_acceso)
 
-        // Mantengo tu listener de insets exactamente como estaba
+        sessionManager = SessionManager(this)
+        usuarioId = sessionManager.getUserId()
+
+        drawerLayout = findViewById(R.id.drawer_layout)
+        ivQrCode = findViewById(R.id.ivQrCode)
+        tvLabelNombre = findViewById(R.id.tvLabelNombre)
+        tvCasa = findViewById(R.id.tvCasa)
+        tvValidoHasta = findViewById(R.id.tvValidoHasta)
+
+        val nombreCompleto = "${sessionManager.getUserName()} ${sessionManager.getApellidosCompletos()}".trim()
+        tvLabelNombre.text = nombreCompleto
+        tvCasa.text = sessionManager.getDireccionCompleta()
+
+        cargarQrPersonal()
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        // Inicializar DrawerLayout y selectable ripple
-        drawerLayout = findViewById(R.id.drawer_layout)
-        val typedArray = obtainStyledAttributes(intArrayOf(android.R.attr.selectableItemBackground))
-        selectableItemBackground = typedArray.getDrawable(0)
-        typedArray.recycle()
-
-        // Ajustes de statusbar (consistente con el resto)
-        window.statusBarColor = Color.parseColor("#F5F5F5")
-        WindowCompat.getInsetsController(window, window.decorView).apply {
-            isAppearanceLightStatusBars = true
-        }
-
-        // Configurar listeners del drawer/menu
         setupDrawerMenuButton()
         setupDrawerItemListeners()
-
-        // Resaltar el item activo (Accesos)
+        setupDrawerHeader()
         highlightActiveMenuItem(R.id.llAccesosMenu)
-
-        // Mantener tus listeners de botones (registro / historial)
         setupButtonListeners()
 
-        // Manejo del botón de retroceso para cerrar el drawer si está abierto
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -80,28 +90,39 @@ class Acceso : AppCompatActivity() {
         })
     }
 
-    // Tu función existente (no la toqué)
-    private fun setupButtonListeners() {
-        // 1. Obtener la referencia al botón "Accesos para invitados"
-        val btnRegistro = findViewById<CardView>(R.id.btnAccesosInvitados)
+    private fun cargarQrPersonal() {
+        lifecycleScope.launch {
+            val qrResponse = accesosController.getQRPersonal(usuarioId)
 
-        // 2. Obtener la referencia al botón "Historial de invitados"
+            if (qrResponse != null) {
+                val bitmap = QRGenerator.generateQRCode(qrResponse.codigoQR, 512, 512)
+
+                if (bitmap != null) {
+                    ivQrCode.setImageBitmap(bitmap)
+                }
+
+                tvValidoHasta.text = "Válido hasta: ${qrResponse.fechaVencimiento.split("T")[0]}"
+            } else {
+                Toast.makeText(this@Acceso, "No tienes un QR activo", Toast.LENGTH_LONG).show()
+                tvValidoHasta.text = "Sin QR Asignado"
+            }
+        }
+    }
+
+    private fun setupButtonListeners() {
+        val btnRegistro = findViewById<CardView>(R.id.btnAccesosInvitados)
         val btnHistorial = findViewById<CardView>(R.id.btnHistorialInvitados)
 
-        // --- Listener para Registro de Invitados ---
         btnRegistro.setOnClickListener {
             val intentRegistro = Intent(this, Registro_invitados::class.java)
             startActivity(intentRegistro)
         }
 
-        // --- Listener para Historial de Invitados ---
         btnHistorial.setOnClickListener {
             val intentHistorial = Intent(this, Historial_invitados::class.java)
             startActivity(intentHistorial)
         }
     }
-
-    // --- Drawer/Menu functions (añadidas) ---
     private fun setupDrawerMenuButton() {
         val btnMenu = findViewById<ImageButton>(R.id.btnMenu)
         btnMenu.setOnClickListener {
@@ -109,35 +130,21 @@ class Acceso : AppCompatActivity() {
         }
     }
 
-    private fun highlightActiveMenuItem(activeLayoutId: Int) {
-        // Nav drawer content (igual que en Home/Reportes)
-        val navDrawerContent = findViewById<LinearLayout>(R.id.nav_drawer_content)
-        val menuContainer = navDrawerContent.getChildAt(1) as LinearLayout
-
-        for (i in 0 until menuContainer.childCount) {
-            val child = menuContainer.getChildAt(i)
-            if (child is LinearLayout && menuItemsToHighlight.contains(child.id)) {
-                val isActive = child.id == activeLayoutId
-
-                // Fondo y ripple
-                child.setBackgroundColor(if (isActive) COLOR_ACTIVE_BG else COLOR_INACTIVE_BG)
-                child.foreground = if (!isActive) selectableItemBackground else null
-
-                // Icono + texto
-                if (child.childCount >= 2) {
-                    val icon = child.getChildAt(0) as android.widget.ImageView
-                    val text = child.getChildAt(1) as TextView
-
-                    val textColor = if (isActive) COLOR_ACTIVE_TEXT else COLOR_INACTIVE_TEXT
-                    icon.setColorFilter(textColor)
-                    text.setTextColor(textColor)
-                    text.setTypeface(null, if (isActive) Typeface.BOLD else Typeface.NORMAL)
-                }
-            }
+    private fun setupDrawerHeader() {
+        val tvDrawerName = findViewById<TextView>(R.id.tvDrawerUserName)
+        val tvDrawerAddress = findViewById<TextView>(R.id.tvDrawerUserAddress)
+        val apellidos = sessionManager.getApellidosCompletos()
+        val direccion = sessionManager.getDireccionCompleta()
+        if (apellidos.isNotEmpty()) {
+            tvDrawerName.text = apellidos
+        } else {
+            tvDrawerName.text = "Usuario"
         }
+        tvDrawerAddress.text = direccion
     }
 
     private fun setupDrawerItemListeners() {
+
         val llInicio = findViewById<LinearLayout>(R.id.llInicio)
         val llReportes = findViewById<LinearLayout>(R.id.llReportesMenu)
         val llAccesos = findViewById<LinearLayout>(R.id.llAccesosMenu)
@@ -148,30 +155,61 @@ class Acceso : AppCompatActivity() {
         val llPerfil = findViewById<LinearLayout>(R.id.llPerfilMenu)
         val llCerrarSesion = findViewById<LinearLayout>(R.id.llCerrarSesion)
 
-        // Función auxiliar para navegar y cerrar drawer
         fun navigateAndFinish(targetActivity: Class<*>) {
             drawerLayout.closeDrawer(GravityCompat.START)
             startActivity(Intent(this, targetActivity))
             finish()
         }
 
-        // Navegación del menú (mantengo la misma lógica)
-        llInicio.setOnClickListener { navigateAndFinish(Home::class.java) }
-        llReportes.setOnClickListener { navigateAndFinish(Reportes::class.java) }
-        llAccesos.setOnClickListener { /* estamos en Acceso -> solo cerrar drawer */ drawerLayout.closeDrawer(GravityCompat.START) }
-        llChat.setOnClickListener { navigateAndFinish(Chat_vecinal::class.java) }
-        llMapa.setOnClickListener { navigateAndFinish(Mapa::class.java) }
-        llServicios.setOnClickListener { navigateAndFinish(Pagos_Servicios::class.java) }
-        llAvisos.setOnClickListener { navigateAndFinish(Avisos_vecinales::class.java) }
-        llPerfil.setOnClickListener { navigateAndFinish(Perfil::class.java) }
+        fun navigateAndHighlight(targetActivity: Class<*>, activeLayoutId: Int) {
+            highlightActiveMenuItem(activeLayoutId)
+            drawerLayout.closeDrawer(GravityCompat.START)
+            if (targetActivity != Acceso::class.java) {
+                startActivity(Intent(this, targetActivity))
+                finish()
+            }
+        }
+
+        llInicio.setOnClickListener { navigateAndHighlight(Home::class.java, R.id.llInicio) }
+        llReportes.setOnClickListener { navigateAndHighlight(Reportes::class.java, R.id.llReportesMenu) }
+        llAccesos.setOnClickListener { navigateAndHighlight(Acceso::class.java, R.id.llAccesosMenu) }
+        llChat.setOnClickListener { navigateAndHighlight(Chat_vecinal::class.java, R.id.llChatMenu) }
+        llMapa.setOnClickListener { navigateAndHighlight(Mapa::class.java, R.id.llMapaMenu) }
+        llServicios.setOnClickListener { navigateAndHighlight(Pagos_Servicios::class.java, R.id.llServiciosMenu) }
+        llAvisos.setOnClickListener { navigateAndHighlight(Avisos_vecinales::class.java, R.id.llAvisosMenu) }
+        llPerfil.setOnClickListener { navigateAndHighlight(Perfil::class.java, R.id.llPerfilMenu) }
 
         llCerrarSesion.setOnClickListener {
             drawerLayout.closeDrawer(GravityCompat.START)
+            sessionManager.clearSession()
             val intent = Intent(this, Login::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
             startActivity(intent)
             finish()
+        }
+    }
+
+    private fun highlightActiveMenuItem(activeLayoutId: Int) {
+        val navDrawerContent = findViewById<LinearLayout>(R.id.nav_drawer_content)
+        val menuContainer = navDrawerContent.getChildAt(1) as LinearLayout
+
+        for (i in 0 until menuContainer.childCount) {
+            val child = menuContainer.getChildAt(i)
+            if (child is LinearLayout && menuItemsToHighlight.contains(child.id)) {
+                val isActive = child.id == activeLayoutId
+                child.setBackgroundColor(if (isActive) COLOR_ACTIVE_BG else COLOR_INACTIVE_BG)
+                child.foreground = if (!isActive) selectableItemBackground else null
+
+                if (child.childCount >= 2) {
+                    val icon = child.getChildAt(0) as ImageView
+                    val text = child.getChildAt(1) as TextView
+                    val textColor = if (isActive) COLOR_ACTIVE_TEXT else COLOR_INACTIVE_TEXT
+                    icon.setColorFilter(textColor)
+                    text.setTextColor(textColor)
+                    text.setTypeface(null, if (isActive) Typeface.BOLD else Typeface.NORMAL)
+                }
+            }
         }
     }
 }

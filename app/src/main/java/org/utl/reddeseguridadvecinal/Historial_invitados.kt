@@ -5,10 +5,13 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -17,12 +20,25 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.core.view.GravityCompat
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.launch
+import org.utl.reddeseguridadvecinal.controller.AccesosController
+import org.utl.reddeseguridadvecinal.util.SessionManager
 
 class Historial_invitados : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
+    private lateinit var rvHistorial: RecyclerView
+    private lateinit var progressBar: ProgressBar
+    private lateinit var tvListaVacia: TextView
+    private lateinit var adapter: InvitadosAdapter
+    private lateinit var sessionManager: SessionManager
+    private val accesosController = AccesosController()
+    private var usuarioId: Int = -1
 
-    // --- Colores y configuraciones del menú ---
+    // Colores y menu
     private val COLOR_ACTIVE_BG = Color.parseColor("#F0FDF4")
     private val COLOR_INACTIVE_BG = Color.WHITE
     private val COLOR_ACTIVE_TEXT = Color.parseColor("#047857")
@@ -41,8 +57,19 @@ class Historial_invitados : AppCompatActivity() {
         setupStatusBar()
         setContentView(R.layout.activity_historial_invitados)
 
-        // --- Inicialización del Drawer ---
+        sessionManager = SessionManager(this)
+        usuarioId = sessionManager.getUserId()
+
+        // Inicializar Vistas
         drawerLayout = findViewById(R.id.drawer_layout)
+        rvHistorial = findViewById(R.id.rvHistorialInvitados)
+        progressBar = findViewById(R.id.progressBar)
+        tvListaVacia = findViewById(R.id.tvListaVacia)
+
+
+        setupRecyclerView()
+        cargarHistorial()
+
         val typedArray = obtainStyledAttributes(intArrayOf(android.R.attr.selectableItemBackground))
         selectableItemBackground = typedArray.getDrawable(0)
         typedArray.recycle()
@@ -53,14 +80,11 @@ class Historial_invitados : AppCompatActivity() {
             insets
         }
 
-        // --- Configuración del menú ---
         setupDrawerMenuButton()
         setupDrawerItemListeners()
+        setupDrawerHeader() // 🔥 Agregar header
+        highlightActiveMenuItem(R.id.llAccesosMenu)
 
-        // 🚨 Resalta el elemento activo del menú
-        highlightActiveMenuItem(R.id.llAccesosMenu) // Puedes cambiarlo según lo que desees marcar activo
-
-        // --- Manejo del botón "Atrás" ---
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -73,7 +97,50 @@ class Historial_invitados : AppCompatActivity() {
         })
     }
 
-    // --- Configura el botón del menú lateral ---
+    private fun setupRecyclerView() {
+        adapter = InvitadosAdapter(emptyList())
+        rvHistorial.layoutManager = LinearLayoutManager(this)
+        rvHistorial.adapter = adapter
+    }
+
+    private fun cargarHistorial() {
+        progressBar.visibility = View.VISIBLE
+        rvHistorial.visibility = View.GONE
+        tvListaVacia.visibility = View.GONE
+
+        lifecycleScope.launch {
+            val historial = accesosController.getHistorialInvitados(usuarioId)
+
+            progressBar.visibility = View.GONE
+
+            if (historial != null) {
+                if (historial.isNotEmpty()) {
+                    rvHistorial.visibility = View.VISIBLE
+                    adapter.actualizarLista(historial.sortedByDescending { it.fechaGeneracion })
+                } else {
+                    tvListaVacia.visibility = View.VISIBLE
+                }
+            } else {
+                Toast.makeText(this@Historial_invitados, "Error al cargar el historial", Toast.LENGTH_SHORT).show()
+                tvListaVacia.text = "Error de conexión"
+                tvListaVacia.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun setupDrawerHeader() {
+        val tvDrawerName = findViewById<TextView>(R.id.tvDrawerUserName)
+        val tvDrawerAddress = findViewById<TextView>(R.id.tvDrawerUserAddress)
+        val apellidos = sessionManager.getApellidosCompletos()
+        val direccion = sessionManager.getDireccionCompleta()
+        if (apellidos.isNotEmpty()) {
+            tvDrawerName.text = apellidos
+        } else {
+            tvDrawerName.text = "Usuario"
+        }
+        tvDrawerAddress.text = direccion
+    }
+
     private fun setupDrawerMenuButton() {
         val btnMenu = findViewById<ImageButton>(R.id.btnMenu)
         btnMenu.setOnClickListener {
@@ -81,7 +148,6 @@ class Historial_invitados : AppCompatActivity() {
         }
     }
 
-    // --- Configura la barra de estado ---
     private fun setupStatusBar() {
         window.statusBarColor = Color.parseColor("#F5F5F5")
         WindowCompat.getInsetsController(window, window.decorView).apply {
@@ -89,7 +155,6 @@ class Historial_invitados : AppCompatActivity() {
         }
     }
 
-    // --- Resalta el ítem activo del menú ---
     private fun highlightActiveMenuItem(activeLayoutId: Int) {
         val navDrawerContent = findViewById<LinearLayout>(R.id.nav_drawer_content)
         val menuContainer = navDrawerContent.getChildAt(1) as LinearLayout
@@ -97,7 +162,6 @@ class Historial_invitados : AppCompatActivity() {
         for (i in 0 until menuContainer.childCount) {
             val child = menuContainer.getChildAt(i)
             if (child is LinearLayout && menuItemsToHighlight.contains(child.id)) {
-
                 val isActive = child.id == activeLayoutId
                 child.setBackgroundColor(if (isActive) COLOR_ACTIVE_BG else COLOR_INACTIVE_BG)
                 child.foreground = if (!isActive) selectableItemBackground else null
@@ -114,7 +178,6 @@ class Historial_invitados : AppCompatActivity() {
         }
     }
 
-    // --- Configuración de los listeners de los ítems del menú ---
     private fun setupDrawerItemListeners() {
         val llInicio = findViewById<LinearLayout>(R.id.llInicio)
         val llReportes = findViewById<LinearLayout>(R.id.llReportesMenu)
@@ -132,17 +195,27 @@ class Historial_invitados : AppCompatActivity() {
             finish()
         }
 
-        llInicio.setOnClickListener { navigateAndFinish(Home::class.java) }
-        llReportes.setOnClickListener { navigateAndFinish(Reportes::class.java) }
-        llAccesos.setOnClickListener { navigateAndFinish(Acceso::class.java) }
-        llChat.setOnClickListener { navigateAndFinish(Chat_vecinal::class.java) }
-        llMapa.setOnClickListener { navigateAndFinish(Mapa::class.java) }
-        llServicios.setOnClickListener { navigateAndFinish(Pagos_Servicios::class.java) }
-        llAvisos.setOnClickListener { navigateAndFinish(Avisos_vecinales::class.java) }
-        llPerfil.setOnClickListener { navigateAndFinish(Perfil::class.java) }
+        fun navigateAndHighlight(targetActivity: Class<*>, activeLayoutId: Int) {
+            highlightActiveMenuItem(activeLayoutId)
+            drawerLayout.closeDrawer(GravityCompat.START)
+            if (targetActivity != Historial_invitados::class.java) {
+                startActivity(Intent(this, targetActivity))
+                finish()
+            }
+        }
+
+        llInicio.setOnClickListener { navigateAndHighlight(Home::class.java, R.id.llInicio) }
+        llReportes.setOnClickListener { navigateAndHighlight(Reportes::class.java, R.id.llReportesMenu) }
+        llAccesos.setOnClickListener { navigateAndHighlight(Acceso::class.java, R.id.llAccesosMenu) }
+        llChat.setOnClickListener { navigateAndHighlight(Chat_vecinal::class.java, R.id.llChatMenu) }
+        llMapa.setOnClickListener { navigateAndHighlight(Mapa::class.java, R.id.llMapaMenu) }
+        llServicios.setOnClickListener { navigateAndHighlight(Pagos_Servicios::class.java, R.id.llServiciosMenu) }
+        llAvisos.setOnClickListener { navigateAndHighlight(Avisos_vecinales::class.java, R.id.llAvisosMenu) }
+        llPerfil.setOnClickListener { navigateAndHighlight(Perfil::class.java, R.id.llPerfilMenu) }
 
         llCerrarSesion.setOnClickListener {
             drawerLayout.closeDrawer(GravityCompat.START)
+            sessionManager.clearSession()
             val intent = Intent(this, Login::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
