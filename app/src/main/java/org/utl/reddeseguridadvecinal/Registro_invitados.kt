@@ -1,12 +1,16 @@
 package org.utl.reddeseguridadvecinal
 
 import android.app.DatePickerDialog
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
@@ -27,16 +31,15 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import org.utl.reddeseguridadvecinal.controller.AccesosController
 import org.utl.reddeseguridadvecinal.modelo.InvitadoRequest
+import org.utl.reddeseguridadvecinal.util.QRGenerator
 import org.utl.reddeseguridadvecinal.util.SessionManager
-import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Locale
 
 class Registro_invitados : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
 
-
+    // Vistas del Formulario
     private lateinit var etNombre: EditText
     private lateinit var etApellidoPaterno: EditText
     private lateinit var etApellidoMaterno: EditText
@@ -44,22 +47,21 @@ class Registro_invitados : AppCompatActivity() {
     private lateinit var etFecha: EditText
     private lateinit var btnGuardar: CardView
 
+    // Lógica y Datos
     private lateinit var sessionManager: SessionManager
     private val accesosController = AccesosController()
     private var userId: Int = -1
-
     private var fechaSeleccionadaAPI: String = ""
 
+    // Colores del menú
     private val COLOR_ACTIVE_BG = Color.parseColor("#F0FDF4")
     private val COLOR_INACTIVE_BG = Color.WHITE
     private val COLOR_ACTIVE_TEXT = Color.parseColor("#047857")
     private val COLOR_INACTIVE_TEXT = Color.parseColor("#111827")
-
     private val menuItemsToHighlight = listOf(
         R.id.llInicio, R.id.llReportesMenu, R.id.llAccesosMenu, R.id.llChatMenu,
         R.id.llMapaMenu, R.id.llServiciosMenu, R.id.llAvisosMenu, R.id.llPerfilMenu
     )
-
     private var selectableItemBackground: Drawable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -118,13 +120,43 @@ class Registro_invitados : AppCompatActivity() {
     private fun setupFormLogic() {
         etDomicilio.setText(sessionManager.getDireccionCompleta())
         etDomicilio.isEnabled = false
+
         etFecha.setOnClickListener {
             mostrarDatePicker()
         }
 
         btnGuardar.setOnClickListener {
+            mostrarDialogoConfirmacion()
+        }
+    }
+
+    private fun mostrarDialogoConfirmacion() {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.modal_confirmar)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+        val tvTitulo = dialog.findViewById<TextView>(R.id.tvTituloAlerta)
+        val tvMensaje = dialog.findViewById<TextView>(R.id.tvMensajePrincipal)
+        val tvSubmensaje = dialog.findViewById<TextView>(R.id.tvMensajeSecundario)
+
+        tvTitulo.text = "REGISTRAR INVITADO"
+        tvMensaje.text = "¿Los datos del invitado son correctos?"
+        tvSubmensaje.text = "Se generará un código QR de acceso."
+
+        val btnConfirmarDialog = dialog.findViewById<CardView>(R.id.btnConfirmar)
+        val btnCancelarDialog = dialog.findViewById<CardView>(R.id.btnCancelar)
+
+        btnConfirmarDialog.setOnClickListener {
+            dialog.dismiss()
             guardarInvitado()
         }
+
+        btnCancelarDialog.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     private fun mostrarDatePicker() {
@@ -138,12 +170,12 @@ class Registro_invitados : AppCompatActivity() {
             val fechaMostrar = String.format("%02d/%02d/%04d", dayOfMonth, mesReal, year)
             etFecha.setText(fechaMostrar)
             fechaSeleccionadaAPI = String.format("%04d-%02d-%02dT23:59:59", year, mesReal, dayOfMonth)
-
         }, anio, mes, dia)
 
         datePicker.datePicker.minDate = System.currentTimeMillis() - 1000
         datePicker.show()
     }
+
     private fun guardarInvitado() {
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         currentFocus?.let { imm.hideSoftInputFromWindow(it.windowToken, 0) }
@@ -166,18 +198,37 @@ class Registro_invitados : AppCompatActivity() {
         )
 
         btnGuardar.isEnabled = false
-        lifecycleScope.launch {
-            val exito = accesosController.crearInvitado(request)
 
-            if (exito) {
-                Toast.makeText(this@Registro_invitados, "Invitación creada exitosamente", Toast.LENGTH_LONG).show()
+        lifecycleScope.launch {
+            val exitoCreacion = accesosController.crearInvitado(request)
+
+            if (exitoCreacion) {
+                Toast.makeText(this@Registro_invitados, "Generando código QR...", Toast.LENGTH_SHORT).show()
+
+                val historial = accesosController.getHistorialInvitados(userId)
+
+                val ultimoInvitado = historial?.maxByOrNull { it.fechaGeneracion }
+
+                if (ultimoInvitado != null && ultimoInvitado.codigoQR.isNotEmpty()) {
+                    val qrBitmap = QRGenerator.generateQRCode(ultimoInvitado.codigoQR, 512, 512)
+
+                    if (qrBitmap != null) {
+                        val nombreArchivo = "QR_${nombre}_${paterno}"
+                        QRGenerator.guardarImagenEnGaleria(this@Registro_invitados, qrBitmap, nombreArchivo)
+                    }
+                }
+
+                // 5. Finalizamos
+                Toast.makeText(this@Registro_invitados, "Invitación creada con éxito", Toast.LENGTH_SHORT).show()
                 finish()
+
             } else {
                 Toast.makeText(this@Registro_invitados, "Error al crear invitación", Toast.LENGTH_LONG).show()
                 btnGuardar.isEnabled = true
             }
         }
     }
+
     private fun setupDrawerHeader() {
         val tvDrawerName = findViewById<TextView>(R.id.tvDrawerUserName)
         val tvDrawerAddress = findViewById<TextView>(R.id.tvDrawerUserAddress)
@@ -200,9 +251,8 @@ class Registro_invitados : AppCompatActivity() {
 
     private fun setupStatusBar() {
         window.statusBarColor = Color.parseColor("#F5F5F5")
-        WindowCompat.getInsetsController(window, window.decorView).apply {
-            isAppearanceLightStatusBars = true
-        }
+        val wic = WindowCompat.getInsetsController(window, window.decorView)
+        wic.isAppearanceLightStatusBars = true
     }
 
     private fun highlightActiveMenuItem(activeLayoutId: Int) {
