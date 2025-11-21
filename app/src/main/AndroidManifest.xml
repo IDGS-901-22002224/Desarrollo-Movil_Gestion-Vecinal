@@ -23,7 +23,7 @@
         android:theme="@style/Theme.RedDeSeguridadVecinal">
 
         <meta-data
-            android:name="com.google.android.geo.API_KEY"
+            android:name=""
             android:value="" />
         <activity
             android:name=".Pagar"

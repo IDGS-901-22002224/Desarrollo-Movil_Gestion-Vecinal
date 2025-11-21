@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.getValue
 
 object Api {
-    private const val BASE_URL = "http://192.168.10.196:5165/"
+    private const val BASE_URL = ""
 
     private val client = OkHttpClient.Builder()
         .connectTimeout(180, TimeUnit.SECONDS)
