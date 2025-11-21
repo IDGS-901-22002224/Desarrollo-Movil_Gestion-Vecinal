@@ -5,16 +5,18 @@ app/src/main/java/org/utl/reddeseguridadvecinal/modelo/*.kt
 app/src/main/java/org/utl/reddeseguridadvecinal/util/*.kt
 app/src/main/res/layout/*.xml
 
-# --- 2. PERMITIR ARCHIVOS BASE (LOGIN, HOME, API, SESSION) ---
+# --- 2. PERMITIR ARCHIVOS BASE (LOGIN, HOME, API) ---
 !app/src/main/java/org/utl/reddeseguridadvecinal/MainActivity.kt
 !app/src/main/java/org/utl/reddeseguridadvecinal/Login.kt
 !app/src/main/java/org/utl/reddeseguridadvecinal/Home.kt
 
-# Util (Solo SessionManager)
+# Util Base
 !app/src/main/java/org/utl/reddeseguridadvecinal/util/SessionManager.kt
 
-# Api y Controllers Base
+# Api Base
 !app/src/main/java/org/utl/reddeseguridadvecinal/api/Api.kt
+
+# Controller Base
 !app/src/main/java/org/utl/reddeseguridadvecinal/controller/LoginController.kt
 
 # Modelos Base
@@ -29,15 +31,31 @@ app/src/main/res/layout/*.xml
 !app/src/main/res/layout/modal_incoveniente.xml
 !app/src/main/res/layout/modal_error.xml
 
-# --- 3. PERMITIR SOLO MÓDULO CHAT VECINAL ---
-# Lógica
-!app/src/main/java/org/utl/reddeseguridadvecinal/Chat_vecinal.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/MensajeChat.kt
+# --- 3. PERMITIR SOLO MÓDULO ACCESOS ---
+# Lógica (Activities y Adapter)
+!app/src/main/java/org/utl/reddeseguridadvecinal/Acceso.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/Registro_invitados.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/Historial_invitados.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/InvitadosAdapter.kt
+
+# Utilidades (QR)
+!app/src/main/java/org/utl/reddeseguridadvecinal/util/QRGenerator.kt
+
+# Controlador
+!app/src/main/java/org/utl/reddeseguridadvecinal/controller/AccesosController.kt
+
+# Modelos (Incluyo posibles variaciones de nombre)
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/InvitadosModels.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/InvitadoRequest.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/InvitadoResponse.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/QRPersonalResponse.kt
 
 # Diseños
-!app/src/main/res/layout/activity_chat_vecinal.xml
-!app/src/main/res/layout/item_chat_propio.xml
-!app/src/main/res/layout/item_chat_otro.xml
+!app/src/main/res/layout/activity_acceso.xml
+!app/src/main/res/layout/activity_registro_invitados.xml
+!app/src/main/res/layout/activity_historial_invitados.xml
+!app/src/main/res/layout/item_invitado.xml
+!app/src/main/res/layout/modal_confirmar.xml
 
 # --- 4. ARCHIVOS DE SISTEMA (NO TOCAR) ---
 *.iml
