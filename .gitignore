@@ -1,57 +1,53 @@
-# --- BLOQUEAR TODO POR DEFECTO ---
-*
-
-# --- PERMITIR SISTEMA ---
-!*/
-!.gitignore
-!build.gradle.kts
-!settings.gradle.kts
-!gradle.properties
-!gradlew
-!gradlew.bat
-!gradle/
-!app/
-!app/build.gradle.kts
-!app/src/
-!app/src/main/
-!app/src/main/AndroidManifest.xml
-!app/src/main/res/
-!app/src/main/res/values/
-!app/src/main/res/drawable/
-!app/src/main/res/mipmap-anydpi-v26/
-
-# --- BLOQUEAR CODIGO FUENTE ---
+# --- 1. BLOQUEO TOTAL (CARPETAS Y SUB-CARPETAS) ---
 app/src/main/java/org/utl/reddeseguridadvecinal/*.kt
+app/src/main/java/org/utl/reddeseguridadvecinal/controller/*.kt
+app/src/main/java/org/utl/reddeseguridadvecinal/modelo/*.kt
+app/src/main/java/org/utl/reddeseguridadvecinal/util/*.kt
 app/src/main/res/layout/*.xml
 
-# --- PERMITIR BASE ---
+# --- 2. PERMITIR ARCHIVOS BASE (LOGIN, HOME, API, SESSION) ---
 !app/src/main/java/org/utl/reddeseguridadvecinal/MainActivity.kt
 !app/src/main/java/org/utl/reddeseguridadvecinal/Login.kt
 !app/src/main/java/org/utl/reddeseguridadvecinal/Home.kt
+
+# Util (Solo SessionManager)
+!app/src/main/java/org/utl/reddeseguridadvecinal/util/SessionManager.kt
+
+# Api y Controllers Base
+!app/src/main/java/org/utl/reddeseguridadvecinal/api/Api.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/controller/LoginController.kt
+
+# Modelos Base
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/LoginRequest.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/LoginResponse.kt
+
+# Layouts Base
 !app/src/main/res/layout/activity_main.xml
 !app/src/main/res/layout/activity_login.xml
 !app/src/main/res/layout/activity_home.xml
 !app/src/main/res/layout/nav_drawer_content.xml
+!app/src/main/res/layout/modal_incoveniente.xml
+!app/src/main/res/layout/modal_error.xml
 
-# --- PERMITIR SOLO UTIL DE SESION (NO QR) ---
-app/src/main/java/org/utl/reddeseguridadvecinal/util/*.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/util/SessionManager.kt
+# --- 3. PERMITIR SOLO MÓDULO CHAT VECINAL ---
+# Lógica
+!app/src/main/java/org/utl/reddeseguridadvecinal/Chat_vecinal.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/MensajeChat.kt
 
-# --- PERMITIR SOLO CONTROLADOR DE MAPA Y LOGIN ---
-app/src/main/java/org/utl/reddeseguridadvecinal/controller/*.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/controller/LoginController.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/controller/MapaController.kt
+# Diseños
+!app/src/main/res/layout/activity_chat_vecinal.xml
+!app/src/main/res/layout/item_chat_propio.xml
+!app/src/main/res/layout/item_chat_otro.xml
 
-# --- PERMITIR SOLO MODELOS NECESARIOS ---
-app/src/main/java/org/utl/reddeseguridadvecinal/modelo/*.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/LoginRequest.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/LoginResponse.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/MarcadorResponse.kt
-
-# --- PERMITIR API ---
-app/src/main/java/org/utl/reddeseguridadvecinal/api/*.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/api/Api.kt
-
-# --- PERMITIR MÓDULO MAPA ---
-!app/src/main/java/org/utl/reddeseguridadvecinal/Mapa.kt
-!app/src/main/res/layout/activity_mapa.xml
+# --- 4. ARCHIVOS DE SISTEMA (NO TOCAR) ---
+*.iml
+.gradle
+/local.properties
+/.idea/
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+app/build/
+app/google-services.json
