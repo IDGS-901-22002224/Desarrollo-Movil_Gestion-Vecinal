@@ -1,42 +1,57 @@
-# --- 1. BLOQUEAR TODO EL CÓDIGO FUENTE DE TU PAQUETE ---
-app/src/main/java/org/utl/reddeseguridadvecinal/*
+# --- BLOQUEAR TODO POR DEFECTO ---
+*
 
-# --- 2. PERMITIR SOLO ARCHIVOS BASE (LOGIN, HOME, API) ---
+# --- PERMITIR SISTEMA ---
+!*/
+!.gitignore
+!build.gradle.kts
+!settings.gradle.kts
+!gradle.properties
+!gradlew
+!gradlew.bat
+!gradle/
+!app/
+!app/build.gradle.kts
+!app/src/
+!app/src/main/
+!app/src/main/AndroidManifest.xml
+!app/src/main/res/
+!app/src/main/res/values/
+!app/src/main/res/drawable/
+!app/src/main/res/mipmap-anydpi-v26/
+
+# --- BLOQUEAR CODIGO FUENTE ---
+app/src/main/java/org/utl/reddeseguridadvecinal/*.kt
+app/src/main/res/layout/*.xml
+
+# --- PERMITIR BASE ---
 !app/src/main/java/org/utl/reddeseguridadvecinal/MainActivity.kt
 !app/src/main/java/org/utl/reddeseguridadvecinal/Login.kt
 !app/src/main/java/org/utl/reddeseguridadvecinal/Home.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/util/
-!app/src/main/java/org/utl/reddeseguridadvecinal/api/
-!app/src/main/java/org/utl/reddeseguridadvecinal/controller/LoginController.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/LoginRequest.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/LoginResponse.kt
-
-# --- 3. PERMITIR SOLO ARCHIVOS DEL MAPA ---
-!app/src/main/java/org/utl/reddeseguridadvecinal/Mapa.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/controller/MapaController.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/MarcadorResponse.kt
-
-# --- 4. BLOQUEAR TODOS LOS LAYOUTS ---
-app/src/main/res/layout/*
-
-# --- 5. PERMITIR LAYOUTS BASE Y MAPA ---
 !app/src/main/res/layout/activity_main.xml
 !app/src/main/res/layout/activity_login.xml
 !app/src/main/res/layout/activity_home.xml
 !app/src/main/res/layout/nav_drawer_content.xml
-!app/src/main/res/layout/modal_incoveniente.xml
-!app/src/main/res/layout/modal_error.xml
-!app/src/main/res/layout/activity_mapa.xml
 
-# --- 6. ARCHIVOS DE SISTEMA (NO TOCAR) ---
-*.iml
-.gradle
-/local.properties
-/.idea/
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
-app/build/
-app/google-services.json
+# --- PERMITIR SOLO UTIL DE SESION (NO QR) ---
+app/src/main/java/org/utl/reddeseguridadvecinal/util/*.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/util/SessionManager.kt
+
+# --- PERMITIR SOLO CONTROLADOR DE MAPA Y LOGIN ---
+app/src/main/java/org/utl/reddeseguridadvecinal/controller/*.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/controller/LoginController.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/controller/MapaController.kt
+
+# --- PERMITIR SOLO MODELOS NECESARIOS ---
+app/src/main/java/org/utl/reddeseguridadvecinal/modelo/*.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/LoginRequest.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/LoginResponse.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/MarcadorResponse.kt
+
+# --- PERMITIR API ---
+app/src/main/java/org/utl/reddeseguridadvecinal/api/*.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/api/Api.kt
+
+# --- PERMITIR MÓDULO MAPA ---
+!app/src/main/java/org/utl/reddeseguridadvecinal/Mapa.kt
+!app/src/main/res/layout/activity_mapa.xml

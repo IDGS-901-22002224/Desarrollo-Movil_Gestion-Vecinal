@@ -1,0 +1,35 @@
+# 1. BLOQUEAR TODO EL CÓDIGO FUENTE POR DEFECTO
+app/src/main/java/org/utl/reddeseguridadvecinal/*.kt
+app/src/main/res/layout/*.xml
+
+# 2. PERMITIR SOLO ARCHIVOS BASE
+!app/src/main/java/org/utl/reddeseguridadvecinal/MainActivity.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/Login.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/Home.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/util/SessionManager.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/api/Api.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/controller/LoginController.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/LoginRequest.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/LoginResponse.kt
+!app/src/main/res/layout/activity_main.xml
+!app/src/main/res/layout/activity_login.xml
+!app/src/main/res/layout/activity_home.xml
+!app/src/main/res/layout/nav_drawer_content.xml
+
+# 3. PERMITIR SOLO MÓDULO MAPA
+!app/src/main/java/org/utl/reddeseguridadvecinal/Mapa.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/controller/MapaController.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/MarcadorResponse.kt
+!app/src/main/res/layout/activity_mapa.xml
+
+# 4. ARCHIVOS DE SISTEMA (NO TOCAR)
+*.iml
+.gradle
+/local.properties
+/.idea/
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+app/build/
