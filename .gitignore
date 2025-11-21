@@ -1,29 +1,20 @@
-# --- 1. BLOQUEO TOTAL (CARPETAS Y SUB-CARPETAS) ---
+# 1. BLOQUEO TOTAL
 app/src/main/java/org/utl/reddeseguridadvecinal/*.kt
 app/src/main/java/org/utl/reddeseguridadvecinal/controller/*.kt
 app/src/main/java/org/utl/reddeseguridadvecinal/modelo/*.kt
 app/src/main/java/org/utl/reddeseguridadvecinal/util/*.kt
 app/src/main/res/layout/*.xml
 
-# --- 2. PERMITIR ARCHIVOS BASE (LOGIN, HOME, API) ---
+# 2. ARCHIVOS BASE (Login, Home, API, Session)
 !app/src/main/java/org/utl/reddeseguridadvecinal/MainActivity.kt
 !app/src/main/java/org/utl/reddeseguridadvecinal/Login.kt
 !app/src/main/java/org/utl/reddeseguridadvecinal/Home.kt
-
-# Util Base
 !app/src/main/java/org/utl/reddeseguridadvecinal/util/SessionManager.kt
-
-# Api Base
 !app/src/main/java/org/utl/reddeseguridadvecinal/api/Api.kt
-
-# Controller Base
 !app/src/main/java/org/utl/reddeseguridadvecinal/controller/LoginController.kt
-
-# Modelos Base
 !app/src/main/java/org/utl/reddeseguridadvecinal/modelo/LoginRequest.kt
 !app/src/main/java/org/utl/reddeseguridadvecinal/modelo/LoginResponse.kt
 
-# Layouts Base
 !app/src/main/res/layout/activity_main.xml
 !app/src/main/res/layout/activity_login.xml
 !app/src/main/res/layout/activity_home.xml
@@ -31,33 +22,27 @@ app/src/main/res/layout/*.xml
 !app/src/main/res/layout/modal_incoveniente.xml
 !app/src/main/res/layout/modal_error.xml
 
-# --- 3. PERMITIR SOLO MÓDULO ACCESOS ---
-# Lógica (Activities y Adapter)
-!app/src/main/java/org/utl/reddeseguridadvecinal/Acceso.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/Registro_invitados.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/Historial_invitados.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/InvitadosAdapter.kt
-
-# Utilidades (QR)
-!app/src/main/java/org/utl/reddeseguridadvecinal/util/QRGenerator.kt
+# 3. PERMITIR SOLO MÓDULO REPORTES
+# Lógica
+!app/src/main/java/org/utl/reddeseguridadvecinal/Reportes.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/Realizar_reporte.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/ReportesAdapter.kt
 
 # Controlador
-!app/src/main/java/org/utl/reddeseguridadvecinal/controller/AccesosController.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/controller/ReportesController.kt
 
-# Modelos (Incluyo posibles variaciones de nombre)
-!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/InvitadosModels.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/InvitadoRequest.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/InvitadoResponse.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/QRPersonalResponse.kt
+# Modelos
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/ReporteRequest.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/ReporteResponse.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/TipoReporteResponse.kt
 
 # Diseños
-!app/src/main/res/layout/activity_acceso.xml
-!app/src/main/res/layout/activity_registro_invitados.xml
-!app/src/main/res/layout/activity_historial_invitados.xml
-!app/src/main/res/layout/item_invitado.xml
+!app/src/main/res/layout/activity_reportes.xml
+!app/src/main/res/layout/activity_realizar_reporte.xml
+!app/src/main/res/layout/item_reporte.xml
 !app/src/main/res/layout/modal_confirmar.xml
 
-# --- 4. ARCHIVOS DE SISTEMA (NO TOCAR) ---
+# 4. SISTEMA (NO TOCAR)
 *.iml
 .gradle
 /local.properties
