@@ -5,14 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- CONTENIDO PRINCIPAL -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rootLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#F5F5F5">
 
-    <!-- Header con fondo blanco -->
+    <!-- Header -->
     <androidx.cardview.widget.CardView
         android:id="@+id/cvHeader"
         android:layout_width="0dp"
@@ -29,7 +28,7 @@
             android:layout_height="wrap_content"
             android:padding="20dp">
 
-            <!-- Botón menú hamburguesa -->
+            <!-- menu -->
             <ImageButton
                 android:id="@+id/btnMenu"
                 android:layout_width="48dp"
@@ -43,27 +42,26 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- Título "Solicitar servicio" -->
+            <!-- Titulo -->
             <TextView
                 android:id="@+id/tvTitulo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
                 android:fontFamily="@font/inter_extrabold"
                 android:text="Solicitar recinto"
-                android:textColor="#111827"
                 android:textAlignment="center"
+                android:textColor="#111827"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="@id/btnMenu"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/btnMenu"
+                app:layout_constraintStart_toStartOf="@+id/btnMenu"
                 app:layout_constraintTop_toTopOf="@id/btnMenu" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
 
-    <!-- ScrollView con el contenido -->
+    <!-- ScrollView -->
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -78,7 +76,7 @@
             android:layout_height="wrap_content"
             android:padding="24dp">
 
-            <!-- Contenedor blanco con el formulario -->
+            <!-- Contenedor del formulario -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvFormulario"
                 android:layout_width="0dp"
@@ -96,7 +94,7 @@
                     android:orientation="vertical"
                     android:padding="24dp">
 
-                    <!-- Campo Seleccione el servicio -->
+                    <!-- Seleccione el servicio -->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -124,7 +122,7 @@
 
                     </androidx.cardview.widget.CardView>
 
-                    <!-- Campo Detalles -->
+                    <!-- Detalles -->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -158,7 +156,7 @@
 
                     </androidx.cardview.widget.CardView>
 
-                    <!-- Campo Fecha -->
+                    <!-- Fecha -->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -194,7 +192,7 @@
 
                     </androidx.cardview.widget.CardView>
 
-                    <!-- Campo Hora de inicio -->
+                    <!-- Hora de inicio -->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -266,7 +264,6 @@
                     </androidx.cardview.widget.CardView>
 
 
-                    <!-- Contenedor de botones DENTRO del contenedor blanco -->
                     <LinearLayout
                         android:id="@+id/llBotones"
                         android:layout_width="match_parent"
@@ -275,7 +272,7 @@
                         android:gravity="center"
                         android:orientation="horizontal">
 
-                        <!-- Botón Guardar con degradado verde -->
+                        <!-- Guardar -->
                         <androidx.cardview.widget.CardView
                             android:id="@+id/btnGuardar"
                             android:layout_width="wrap_content"
@@ -308,7 +305,7 @@
 
                         </androidx.cardview.widget.CardView>
 
-                        <!-- Botón Cancelar -->
+                        <!-- Cancelar -->
                         <androidx.cardview.widget.CardView
                             android:id="@+id/btnCancelar"
                             android:layout_width="wrap_content"

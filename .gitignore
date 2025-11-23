@@ -14,6 +14,8 @@
 .cxx
 local.properties
 
+app/google-services.json
+
 # En esta carpeta específica, excluir TODOS los .kt...
 app/src/main/java/org/utl/reddeseguridadvecinal/*.kt
 
@@ -40,3 +42,42 @@ app/src/main/res/layout/*.xml
 !app/src/main/res/layout/modal_incoveniente.xml
 !app/src/main/res/layout/modal_emergencia.xml
 !app/src/main/res/layout/nav_drawer_content.xml
+!app/src/main/res/layout/item_reserva.xml
+!app/src/main/res/layout/item_servicio.xml
+
+# Solo se suben estos archivos de la carpeta
+app/src/main/java/org/utl/reddeseguridadvecinal/controller/*.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/AmenidadesController.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/CargosServiciosController.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/SolicitarServicioController.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/SolicitarRecintoController.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/PagosServiciosController.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/PagarController.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/HistorialServiciosController.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/HistorialRecintoController.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/ErrorDialogFragment.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/ConfirmDialogFragment.kt
+
+# Solo se suben estos archivos de la carpeta
+app/src/main/java/org/utl/reddeseguridadvecinal/logica/*.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/logica/PagarLogica.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/logica/PagosServiciosLogica.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/logica/SolicitarRecintoLogica.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/logica/SolicitarServicioLogica.kt
+
+# Solo se suben estos archivos de la carpeta
+app/src/main/java/org/utl/reddeseguridadvecinal/modelo/*.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/AmenidadDTO.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/CargoMantenimiento.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/CargoServicio.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/CargoServicioDTO.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/CreateReservaRequest.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/DatosGraficaPagos.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/DatosMesActual.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/ReservaDTO.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/ReservaResponse.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/SolicitudServicioData.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/SolicitudServicio.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/SolicitudServicioRequest.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/TipoServicioDTO.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/ApiResponse.kt

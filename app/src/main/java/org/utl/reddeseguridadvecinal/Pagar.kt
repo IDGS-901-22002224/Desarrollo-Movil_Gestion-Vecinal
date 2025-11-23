@@ -18,13 +18,18 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.core.view.GravityCompat
+import org.utl.reddeseguridadvecinal.dialogs.ConfirmDialogFragment
+import org.utl.reddeseguridadvecinal.logica.PagarLogica
+import org.utl.reddeseguridadvecinal.util.SessionManager
 
 class Pagar : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
+    private lateinit var sessionManager: SessionManager
     private var selectableItemBackground: Drawable? = null
+    private lateinit var pagarLogica: PagarLogica
 
-    // Colores del menú
+    // Colores del menu
     private val COLOR_ACTIVE_BG = Color.parseColor("#F0FDF4")
     private val COLOR_INACTIVE_BG = Color.WHITE
     private val COLOR_ACTIVE_TEXT = Color.parseColor("#047857")
@@ -41,13 +46,14 @@ class Pagar : AppCompatActivity() {
         setupStatusBar()
         setContentView(R.layout.activity_pagar)
 
-        // Inicializar Drawer
+        sessionManager = SessionManager(this)
+        pagarLogica = PagarLogica()
+
         drawerLayout = findViewById(R.id.drawer_layout)
         val typedArray = obtainStyledAttributes(intArrayOf(android.R.attr.selectableItemBackground))
         selectableItemBackground = typedArray.getDrawable(0)
         typedArray.recycle()
 
-        // Ajuste del header con margen superior del status bar
         val cvHeader = findViewById<CardView>(R.id.cvHeader)
         ViewCompat.setOnApplyWindowInsetsListener(cvHeader) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -55,14 +61,13 @@ class Pagar : AppCompatActivity() {
             insets
         }
 
-        // Configurar botón del menú
         setupDrawerMenuButton()
         setupDrawerItemListeners()
 
-        // Resaltar el menú activo (Pagos/Servicios)
         highlightActiveMenuItem(R.id.llServiciosMenu)
 
-        // Control del botón físico "Atrás"
+        updateDrawerHeader()
+
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -75,7 +80,7 @@ class Pagar : AppCompatActivity() {
         })
     }
 
-    // --- MÉTODOS COMPARTIDOS ---
+    // --- METODOS COMPARTIDOS ---
 
     private fun setupDrawerMenuButton() {
         val btnMenu = findViewById<ImageButton>(R.id.btnMenu)
@@ -125,6 +130,9 @@ class Pagar : AppCompatActivity() {
         val llPerfil = findViewById<LinearLayout>(R.id.llPerfilMenu)
         val llCerrarSesion = findViewById<LinearLayout>(R.id.llCerrarSesion)
 
+        // Actualizar encabezado del menu
+        updateDrawerHeader()
+
         fun navigateAndFinish(targetActivity: Class<*>) {
             drawerLayout.closeDrawer(GravityCompat.START)
             startActivity(Intent(this, targetActivity))
@@ -137,7 +145,6 @@ class Pagar : AppCompatActivity() {
         llChat.setOnClickListener { navigateAndFinish(Chat_vecinal::class.java) }
         llMapa.setOnClickListener { navigateAndFinish(Mapa::class.java) }
 
-        // Pagos/Servicios (actividad actual)
         llServicios.setOnClickListener { drawerLayout.closeDrawer(GravityCompat.START) }
 
         llAvisos.setOnClickListener { navigateAndFinish(Avisos_vecinales::class.java) }
@@ -145,11 +152,45 @@ class Pagar : AppCompatActivity() {
 
         llCerrarSesion.setOnClickListener {
             drawerLayout.closeDrawer(GravityCompat.START)
-            val intent = Intent(this, Login::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-            startActivity(intent)
-            finish()
+            showLogoutConfirmation()
         }
+    }
+
+    private fun updateDrawerHeader() {
+        val apellidos = sessionManager.getApellidosCompletos()
+        val direccion = sessionManager.getDireccionCompleta()
+
+        val navDrawerContent = findViewById<LinearLayout>(R.id.nav_drawer_content)
+        val headerLayout = navDrawerContent.getChildAt(0) as LinearLayout
+
+        val tvNombreUsuario = headerLayout.getChildAt(0) as? TextView
+        val tvCasa = headerLayout.getChildAt(1) as? TextView
+
+        tvNombreUsuario?.text = apellidos
+        tvCasa?.text = direccion
+    }
+
+    private fun showLogoutConfirmation() {
+        val dialogFragment = ConfirmDialogFragment.newInstance(
+            titulo = "CERRAR SESIÓN",
+            mensajePrincipal = "¿Estás seguro de que quieres cerrar sesión?",
+            mensajeSecundario = "Tendrás que volver a iniciar sesión para reingresar",
+            textoBotonConfirmar = "Cerrar sesión",
+            textoBotonCancelar = "Cancelar",
+            onConfirm = {
+                performLogout()
+            }
+        )
+        dialogFragment.show(supportFragmentManager, "LogoutConfirmDialog")
+    }
+
+    private fun performLogout() {
+        pagarLogica.cerrarSesion(this)
+
+        val intent = Intent(this, Login::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        startActivity(intent)
+        finish()
     }
 }

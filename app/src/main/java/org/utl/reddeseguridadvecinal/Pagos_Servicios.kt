@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -13,19 +14,31 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import org.utl.reddeseguridadvecinal.controller.PagosServiciosController
+import org.utl.reddeseguridadvecinal.dialogs.ConfirmDialogFragment
+import org.utl.reddeseguridadvecinal.logica.PagosServiciosLogica
+import org.utl.reddeseguridadvecinal.modelo.DatosGraficaPagos
+import org.utl.reddeseguridadvecinal.modelo.DatosMesActual
+import org.utl.reddeseguridadvecinal.util.SessionManager
 
 class Pagos_Servicios : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
+    private lateinit var sessionManager: SessionManager
     private var selectableItemBackground: Drawable? = null
+    private lateinit var pagosServiciosLogica: PagosServiciosLogica
+    private lateinit var pagosServiciosController: PagosServiciosController
 
-    // Colores del menú
+    private lateinit var flGraficoContainer: FrameLayout
+    private lateinit var ivGraficoPastel: ImageView
+
     private val COLOR_ACTIVE_BG = Color.parseColor("#F0FDF4")
     private val COLOR_INACTIVE_BG = Color.WHITE
     private val COLOR_ACTIVE_TEXT = Color.parseColor("#047857")
@@ -42,13 +55,18 @@ class Pagos_Servicios : AppCompatActivity() {
         setupStatusBar()
         setContentView(R.layout.activity_pagos_servicios)
 
-        // Inicializar Drawer
+        sessionManager = SessionManager(this)
+        pagosServiciosLogica = PagosServiciosLogica()
+        pagosServiciosController = PagosServiciosController()
+
+        flGraficoContainer = findViewById(R.id.flGraficoContainer)
+        ivGraficoPastel = findViewById(R.id.ivGraficoPastel)
+
         drawerLayout = findViewById(R.id.drawer_layout)
         val typedArray = obtainStyledAttributes(intArrayOf(android.R.attr.selectableItemBackground))
         selectableItemBackground = typedArray.getDrawable(0)
         typedArray.recycle()
 
-        // Ajuste del header con margen superior del status bar
         val cvHeader = findViewById<CardView>(R.id.cvHeader)
         ViewCompat.setOnApplyWindowInsetsListener(cvHeader) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -56,14 +74,15 @@ class Pagos_Servicios : AppCompatActivity() {
             insets
         }
 
-        // Configurar botón del menú
         setupDrawerMenuButton()
         setupDrawerItemListeners()
 
-        // Resaltar el menú activo (Pagos/Servicios)
         highlightActiveMenuItem(R.id.llServiciosMenu)
 
-        // Control del botón físico "Atrás"
+        updateDrawerHeader()
+
+        cargarDatosGrafica()
+
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -76,7 +95,7 @@ class Pagos_Servicios : AppCompatActivity() {
         })
     }
 
-    // --- MÉTODOS COMPARTIDOS ---
+    // --- METODOS COMPARTIDOS ---
 
     private fun setupDrawerMenuButton() {
         val btnMenu = findViewById<ImageButton>(R.id.btnMenu)
@@ -131,19 +150,21 @@ class Pagos_Servicios : AppCompatActivity() {
         val btnRecervas = findViewById<CardView>(R.id.btnRecervas)
         val btnServiciosInternos = findViewById<CardView>(R.id.btnServiciosInternos)
 
-        // Botón Pagos
+        updateDrawerHeader()
+
+        //  Pagos
         btnPagos.setOnClickListener {
             val intent = Intent(this, Pagar::class.java)
             startActivity(intent)
         }
 
-        // Botón Reservas de recintos
+        //  Reservas de recintos
         btnRecervas.setOnClickListener {
             val intent = Intent(this, Historial_recinto::class.java)
             startActivity(intent)
         }
 
-        // Botón Servicios internos
+        //  Servicios internos
         btnServiciosInternos.setOnClickListener {
             val intent = Intent(this, Historial_servicios::class.java)
             startActivity(intent)
@@ -161,7 +182,6 @@ class Pagos_Servicios : AppCompatActivity() {
         llChat.setOnClickListener { navigateAndFinish(Chat_vecinal::class.java) }
         llMapa.setOnClickListener { navigateAndFinish(Mapa::class.java) }
 
-        // Pagos/Servicios (actividad actual)
         llServicios.setOnClickListener { drawerLayout.closeDrawer(GravityCompat.START) }
 
         llAvisos.setOnClickListener { navigateAndFinish(Avisos_vecinales::class.java) }
@@ -169,11 +189,91 @@ class Pagos_Servicios : AppCompatActivity() {
 
         llCerrarSesion.setOnClickListener {
             drawerLayout.closeDrawer(GravityCompat.START)
-            val intent = Intent(this, Login::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-            startActivity(intent)
-            finish()
+            showLogoutConfirmation()
         }
+    }
+
+    private fun updateDrawerHeader() {
+        val apellidos = sessionManager.getApellidosCompletos()
+        val direccion = sessionManager.getDireccionCompleta()
+
+        val navDrawerContent = findViewById<LinearLayout>(R.id.nav_drawer_content)
+        val headerLayout = navDrawerContent.getChildAt(0) as LinearLayout
+
+        val tvNombreUsuario = headerLayout.getChildAt(0) as? TextView
+        val tvCasa = headerLayout.getChildAt(1) as? TextView
+
+        tvNombreUsuario?.text = apellidos
+        tvCasa?.text = direccion
+    }
+
+    private fun showLogoutConfirmation() {
+        val dialogFragment = ConfirmDialogFragment.newInstance(
+            titulo = "CERRAR SESIÓN",
+            mensajePrincipal = "¿Estás seguro de que quieres cerrar sesión?",
+            mensajeSecundario = "Tendrás que volver a iniciar sesión para reingresar",
+            textoBotonConfirmar = "Cerrar sesión",
+            textoBotonCancelar = "Cancelar",
+            onConfirm = {
+                performLogout()
+            }
+        )
+        dialogFragment.show(supportFragmentManager, "LogoutConfirmDialog")
+    }
+
+    private fun performLogout() {
+        pagosServiciosLogica.cerrarSesion(this)
+
+        val intent = Intent(this, Login::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        startActivity(intent)
+        finish()
+    }
+
+    private fun cargarDatosGrafica() {
+        lifecycleScope.launch {
+            try {
+                val usuarioId = sessionManager.getUserId()
+                val datosGrafica = pagosServiciosController.obtenerDatosParaGrafica(usuarioId)
+                val datosMes = pagosServiciosController.obtenerDatosMesActual(usuarioId)
+
+                if (datosGrafica != null) {
+                    val bitmap = pagosServiciosLogica.crearGraficaPastel(datosGrafica)
+                    ivGraficoPastel.setImageBitmap(bitmap)
+
+                    actualizarLeyendas(datosGrafica, datosMes)
+                } else {
+                    mostrarGraficaPorDefecto()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                mostrarGraficaPorDefecto()
+            }
+        }
+    }
+
+    private fun actualizarLeyendas(datos: DatosGraficaPagos, datosMes: DatosMesActual? = null) {
+        val layoutVivienda = findViewById<LinearLayout>(R.id.llLeyendaVivienda)
+        val layoutServicios = findViewById<LinearLayout>(R.id.llLeyendaServicios)
+
+        val textViewVivienda = layoutVivienda.getChildAt(1) as TextView
+        val textViewServicios = layoutServicios.getChildAt(1) as TextView
+
+        textViewVivienda.text = pagosServiciosLogica.formatearTextoVivienda(datos, datosMes)
+        textViewServicios.text = pagosServiciosLogica.formatearTextoServicios(datos, datosMes)
+    }
+
+    private fun mostrarGraficaPorDefecto() {
+        ivGraficoPastel.setImageResource(R.drawable.ic_pie_chart_placeholder)
+
+        val layoutVivienda = findViewById<LinearLayout>(R.id.llLeyendaVivienda)
+        val layoutServicios = findViewById<LinearLayout>(R.id.llLeyendaServicios)
+
+        val textViewVivienda = layoutVivienda.getChildAt(1) as TextView
+        val textViewServicios = layoutServicios.getChildAt(1) as TextView
+
+        textViewVivienda.text = "Pagos de vivienda: $0.00 (0%)"
+        textViewServicios.text = "Pagos de servicios: $0.00 (0%)"
     }
 }
