@@ -31,6 +31,11 @@ import org.utl.reddeseguridadvecinal.controller.PerfilController
 import org.utl.reddeseguridadvecinal.controller.PerfilLogica
 import org.utl.reddeseguridadvecinal.dialogs.ConfirmDialogFragment
 import org.utl.reddeseguridadvecinal.util.SessionManager
+import android.app.DatePickerDialog
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
+import java.util.regex.Pattern
 
 class Perfil : AppCompatActivity() {
 
@@ -138,13 +143,21 @@ class Perfil : AppCompatActivity() {
         }
 
         btnCancelar.setOnClickListener {
-            // datos originales
             cargarDatosUsuario()
             Toast.makeText(this, "Cambios cancelados", Toast.LENGTH_SHORT).show()
         }
 
+        // DatePicker para fecha de nacimiento
+        val cvFechaNacimiento = findViewById<CardView>(R.id.cvFechaNacimiento)
+        cvFechaNacimiento.setOnClickListener {
+            perfilLogica.mostrarDatePickerPerfil(this, etFechaNacimiento)
+        }
+
+        etFechaNacimiento.setOnClickListener {
+            perfilLogica.mostrarDatePickerPerfil(this, etFechaNacimiento)
+        }
+
         perfilLogica.configurarTextWatcherTelefono(etTelefono)
-        perfilLogica.configurarTextWatcherFechaNacimiento(etFechaNacimiento)
         perfilLogica.configurarTextWatcherFechaVencimiento(etFechaVencimiento)
         perfilLogica.configurarTextWatcherNumeroTarjeta(etNumeroTarjeta)
     }
@@ -180,7 +193,9 @@ class Perfil : AppCompatActivity() {
                     usuario?.let {
                         etTelefono.setText(perfilLogica.formatTelefono(it.telefono ?: ""))
                         etEmail.setText(it.email ?: "")
-                        etFechaNacimiento.setText(perfilLogica.formatFechaNacimiento(it.fechaNacimiento ?: ""))
+
+                        // FECHA DE NACIMIENTO-  formato yyyy-MM-dd
+                        etFechaNacimiento.setText(it.fechaNacimiento ?: "")
 
                         // MASCARA DE TARJETA
                         val ultimosDigitos = it.ultimosDigitos ?: ""
@@ -274,11 +289,9 @@ class Perfil : AppCompatActivity() {
 
                 val isActive = child.id == activeLayoutId
 
-                // 1. Configurar el fondo y el efecto de clic
                 child.setBackgroundColor(if (isActive) COLOR_ACTIVE_BG else COLOR_INACTIVE_BG)
                 child.foreground = if (!isActive) selectableItemBackground else null
 
-                // 2. Configurar el texto y el icono
                 if (child.childCount >= 2) {
                     val icon = child.getChildAt(0) as ImageView
                     val text = child.getChildAt(1) as TextView

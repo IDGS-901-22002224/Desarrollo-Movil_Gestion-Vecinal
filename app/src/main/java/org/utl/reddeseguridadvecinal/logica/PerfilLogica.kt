@@ -1,5 +1,6 @@
 package org.utl.reddeseguridadvecinal.controller
 
+import android.app.DatePickerDialog
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,7 +9,10 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import org.utl.reddeseguridadvecinal.modelo.UsuarioUpdateRequest
 import org.utl.reddeseguridadvecinal.util.SessionManager
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
+import java.util.regex.Pattern
 
 class PerfilLogica(
     private val context: Context,
@@ -136,15 +140,6 @@ class PerfilLogica(
         }
     }
 
-    fun formatFechaNacimiento(fecha: String): String {
-        if (fecha.isEmpty()) return ""
-        val clean = fecha.replace("-", "")
-        return when {
-            clean.length >= 8 -> "${clean.substring(0, 4)}-${clean.substring(4, 6)}-${clean.substring(6, 8)}"
-            else -> fecha
-        }
-    }
-
     fun formatFechaVencimiento(fecha: String): String {
         if (fecha.isEmpty()) return ""
         val clean = fecha.replace("/", "").replace("-", "")
@@ -159,10 +154,6 @@ class PerfilLogica(
         editText.addTextChangedListener(createPhoneTextWatcher(editText))
     }
 
-    fun configurarTextWatcherFechaNacimiento(editText: EditText) {
-        editText.addTextChangedListener(createBirthDateTextWatcher(editText))
-    }
-
     fun configurarTextWatcherFechaVencimiento(editText: EditText) {
         editText.addTextChangedListener(createExpiryDateTextWatcher(editText))
     }
@@ -171,7 +162,7 @@ class PerfilLogica(
         editText.addTextChangedListener(createCardNumberTextWatcher(editText))
     }
 
-    // TextWatcher telefono (477-123-1234)
+    // TextWatcher telefono (000-000-0000)
     private fun createPhoneTextWatcher(editText: EditText): TextWatcher {
         return object : TextWatcher {
             private var isFormatting = false
@@ -216,57 +207,6 @@ class PerfilLogica(
                     in 7..10 -> "${cleanText.substring(0, 3)}-${cleanText.substring(3, 6)}-${cleanText.substring(6)}"
                     else -> cleanText.substring(0, 10).let {
                         "${it.substring(0, 3)}-${it.substring(3, 6)}-${it.substring(6)}"
-                    }
-                }
-            }
-        }
-    }
-
-    // TextWatcher  fecha de nacimiento (2004-08-02)
-    private fun createBirthDateTextWatcher(editText: EditText): TextWatcher {
-        return object : TextWatcher {
-            private var isFormatting = false
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(s: Editable?) {
-                if (isFormatting || s.isNullOrEmpty()) return
-                isFormatting = true
-
-                try {
-                    val text = s.toString()
-                    val cleanText = text.replace("-", "")
-
-                    if (text == getFormattedBirthDate(cleanText)) {
-                        return
-                    }
-
-                    when {
-                        cleanText.length <= 8 -> {
-                            val formatted = getFormattedBirthDate(cleanText)
-                            editText.setText(formatted)
-                            editText.setSelection(formatted.length)
-                        }
-                        else -> {
-                            val limited = cleanText.substring(0, 8)
-                            val formatted = getFormattedBirthDate(limited)
-                            editText.setText(formatted)
-                            editText.setSelection(formatted.length)
-                        }
-                    }
-                } finally {
-                    isFormatting = false
-                }
-            }
-
-            private fun getFormattedBirthDate(cleanText: String): String {
-                return when (cleanText.length) {
-                    in 1..4 -> cleanText
-                    in 5..6 -> "${cleanText.substring(0, 4)}-${cleanText.substring(4)}"
-                    in 7..8 -> "${cleanText.substring(0, 4)}-${cleanText.substring(4, 6)}-${cleanText.substring(6)}"
-                    else -> cleanText.substring(0, 8).let {
-                        "${it.substring(0, 4)}-${it.substring(4, 6)}-${it.substring(6)}"
                     }
                 }
             }
@@ -425,5 +365,51 @@ class PerfilLogica(
         FirebaseAuth.getInstance().signOut()
 
         Toast.makeText(context, "Sesión cerrada correctamente", Toast.LENGTH_SHORT).show()
+    }
+
+    fun mostrarDatePickerPerfil(context: Context, editText: EditText) {
+        val calendar = Calendar.getInstance()
+
+        val currentText = editText.text.toString()
+        if (currentText.isNotEmpty() && currentText.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))) {
+            try {
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val date = dateFormat.parse(currentText)
+                if (date != null) {
+                    calendar.time = date
+                }
+            } catch (e: Exception) {
+            }
+        }
+
+        val datePicker = DatePickerDialog(
+            context,
+            { _, year, month, dayOfMonth ->
+                val selectedCalendar = Calendar.getInstance()
+                selectedCalendar.set(Calendar.YEAR, year)
+                selectedCalendar.set(Calendar.MONTH, month)
+                selectedCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                actualizarFechaEditTextPerfil(editText, selectedCalendar)
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        )
+
+        // Establecer fecha maxima y minima
+        val maxCalendar = Calendar.getInstance()
+        val minCalendar = Calendar.getInstance()
+        minCalendar.add(Calendar.YEAR, -100)
+
+        datePicker.datePicker.maxDate = maxCalendar.timeInMillis
+        datePicker.datePicker.minDate = minCalendar.timeInMillis
+
+        // Mostrar el DatePicker
+        datePicker.show()
+    }
+
+    private fun actualizarFechaEditTextPerfil(editText: EditText, calendar: Calendar) {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        editText.setText(dateFormat.format(calendar.time))
     }
 }
