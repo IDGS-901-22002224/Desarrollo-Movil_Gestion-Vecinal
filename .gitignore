@@ -39,6 +39,9 @@ app/src/main/java/org/utl/reddeseguridadvecinal/controller/*.kt
 !app/src/main/java/org/utl/reddeseguridadvecinal/AvisosController.kt
 
 # Solo se suben estos archivos de la carpeta
+app/src/main/java/org/utl/reddeseguridadvecinal/logica/*.kt
+
+# Solo se suben estos archivos de la carpeta
 app/src/main/java/org/utl/reddeseguridadvecinal/modelo/*.kt
 !app/src/main/java/org/utl/reddeseguridadvecinal/modelo/Aviso.kt
 !app/src/main/java/org/utl/reddeseguridadvecinal/modelo/ApiResponse.kt

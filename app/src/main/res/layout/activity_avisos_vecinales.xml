@@ -50,7 +50,6 @@
                     android:id="@+id/tvTitulo"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
                     android:fontFamily="@font/inter_extrabold"
                     android:text="Avisos vecinales"
                     android:textAlignment="center"
@@ -58,7 +57,7 @@
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="@id/btnMenu"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/btnMenu"
+                    app:layout_constraintStart_toStartOf="@+id/btnMenu"
                     app:layout_constraintTop_toTopOf="@id/btnMenu" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
