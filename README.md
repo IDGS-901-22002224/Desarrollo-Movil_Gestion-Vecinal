@@ -20,3 +20,8 @@
 | Funcionalidad completa del login y del perfil | Android Studio | Se realizaron los modulos completos de manera funcional junto con los modales necesarios. | 13/11/22025 |
 | Funcionalidad completa de avisos | Android Studio | Se realizo el modulo completo de avisos junto con los modales necesarios. | 14/11/22025 |
 | Funcionalidad completa de home | Android Studio | Se realizo el modulo completo de home y su alerta de panico junto con los modales necesarios. | 15/11/22025 |
+| Funcionalidad aprovada login y perfil | Android Studio | Se realizon las correciones en los modulos de login y perfil para su aprovacion. | 16/11/22025 |
+| Funcionalidad aprovada de avisos | Android Studio | Se realizon las correciones en el modulo de avisos para su aprovacion. | 17/11/22025 |
+| Funcionalidad completa de los submodulos de solicitar servicios y amenidades | Android Studio | Se realizon los submodulos completos de solicitar servicios y solicitar amenidades junto con los modales necesarios. | 19/11/22025 |
+| Funcionalidad completa de los submodulos de historial servicios y amenidades | Android Studio | Se realizon los submodulos completos de historial servicios e historial amenidades. | 20/11/22025 |
+| Funcionalidad completa del modulo princial tipo dashboard de cargos | Android Studio | Se realizon la funcionalidad completa del dashboard en el apartado principal del modulo de servicios el cual permite ver de mejor manera la informacion de los cargos del mes | 21/11/22025 |
