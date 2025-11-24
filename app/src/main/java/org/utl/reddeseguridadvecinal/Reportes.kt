@@ -35,8 +35,6 @@ import java.util.TimeZone
 class Reportes : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
-
-    // 🔥 VARIABLES DE VISTA (Coinciden con el XML corregido)
     private lateinit var llReportesContainer: LinearLayout
     private lateinit var progressBar: ProgressBar
     private lateinit var tvListaVacia: TextView

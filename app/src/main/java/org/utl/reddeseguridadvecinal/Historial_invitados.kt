@@ -5,94 +5,85 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.core.view.GravityCompat
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
-import org.utl.reddeseguridadvecinal.controller.MapaController
-import org.utl.reddeseguridadvecinal.modelo.MarcadorResponse
+import org.utl.reddeseguridadvecinal.controller.AccesosController
 import org.utl.reddeseguridadvecinal.util.SessionManager
 
-class Mapa : AppCompatActivity(), OnMapReadyCallback {
+class Historial_invitados : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
-    private var selectableItemBackground: Drawable? = null
-
-    // Variables para el Mapa y el Controlador
-    private lateinit var googleMap: GoogleMap
-    private val mapaController = MapaController()
+    private lateinit var rvHistorial: RecyclerView
+    private lateinit var progressBar: ProgressBar
+    private lateinit var tvListaVacia: TextView
+    private lateinit var adapter: InvitadosAdapter
     private lateinit var sessionManager: SessionManager
+    private val accesosController = AccesosController()
+    private var usuarioId: Int = -1
 
-
+    // Colores y menu
     private val COLOR_ACTIVE_BG = Color.parseColor("#F0FDF4")
-
     private val COLOR_INACTIVE_BG = Color.WHITE
     private val COLOR_ACTIVE_TEXT = Color.parseColor("#047857")
     private val COLOR_INACTIVE_TEXT = Color.parseColor("#111827")
 
     private val menuItemsToHighlight = listOf(
-        R.id.llInicio,
-        R.id.llReportesMenu,
-        R.id.llAccesosMenu,
-        R.id.llChatMenu,
-        R.id.llMapaMenu,
-        R.id.llServiciosMenu,
-        R.id.llAvisosMenu,
-        R.id.llPerfilMenu
+        R.id.llInicio, R.id.llReportesMenu, R.id.llAccesosMenu, R.id.llChatMenu,
+        R.id.llMapaMenu, R.id.llServiciosMenu, R.id.llAvisosMenu, R.id.llPerfilMenu
     )
 
+    private var selectableItemBackground: Drawable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_mapa)
+        setupStatusBar()
+        setContentView(R.layout.activity_historial_invitados)
 
-        window.statusBarColor = Color.parseColor("#F5F5F5")
-        WindowCompat.getInsetsController(window, window.decorView).apply {
-            isAppearanceLightStatusBars = true
-        }
+        sessionManager = SessionManager(this)
+        usuarioId = sessionManager.getUserId()
 
+        // Inicializar Vistas
         drawerLayout = findViewById(R.id.drawer_layout)
-        sessionManager = SessionManager(this) // Inicializar SessionManager
+        rvHistorial = findViewById(R.id.rvHistorialInvitados)
+        progressBar = findViewById(R.id.progressBar)
+        tvListaVacia = findViewById(R.id.tvListaVacia)
 
-        // Inicializar fondo seleccionable
+
+        setupRecyclerView()
+        cargarHistorial()
+
         val typedArray = obtainStyledAttributes(intArrayOf(android.R.attr.selectableItemBackground))
         selectableItemBackground = typedArray.getDrawable(0)
         typedArray.recycle()
 
-        ViewCompat.setOnApplyWindowInsetsListener(drawerLayout) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        // INICIALIZAR EL MAPA
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.mapFragment) as SupportMapFragment
-        mapFragment.getMapAsync(this)
-
         setupDrawerMenuButton()
         setupDrawerItemListeners()
-        setupDrawerHeader()
-        highlightActiveMenuItem(R.id.llMapaMenu)
+        setupDrawerHeader() // 🔥 Agregar header
+        highlightActiveMenuItem(R.id.llAccesosMenu)
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -106,59 +97,37 @@ class Mapa : AppCompatActivity(), OnMapReadyCallback {
         })
     }
 
-    //ESTA FUNCION ES LLAMADA CUANDO EL MAPA ESTA LISTO
-    override fun onMapReady(map: GoogleMap) {
-        googleMap = map
-
-        // 1. Mover la camara a una ubicación (Ej. para que no se abra y se muestre el mundo entero)
-        val ubicacionInicial = LatLng(21.1523, -101.711)
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacionInicial, 15f))
-
-        // 2. Cargar los marcadores de la API
-        cargarMarcadoresDeAPI()
+    private fun setupRecyclerView() {
+        adapter = InvitadosAdapter(emptyList())
+        rvHistorial.layoutManager = LinearLayoutManager(this)
+        rvHistorial.adapter = adapter
     }
 
-    //Llama al C# API y dibuja los marcadores
-    private fun cargarMarcadoresDeAPI() {
+    private fun cargarHistorial() {
+        progressBar.visibility = View.VISIBLE
+        rvHistorial.visibility = View.GONE
+        tvListaVacia.visibility = View.GONE
+
         lifecycleScope.launch {
-            val marcadores = mapaController.getMarcadores()
+            val historial = accesosController.getHistorialInvitados(usuarioId)
 
-            if (marcadores != null) {
-                // Exito: La lista de marcadores llego de la API
-                for (marcador in marcadores) {
+            progressBar.visibility = View.GONE
 
-                    // 1. Crear la coordenada
-                    val posicion = LatLng(marcador.latitud, marcador.longitud)
-
-                    // 2. Crear el marcador
-                    val markerOptions = MarkerOptions()
-                        .position(posicion)
-                        .title(marcador.indicador)     // El 'indicador' será el título
-                        .snippet(marcador.comentario)  // El 'comentario' sera el texto extra
-
-                    // 3. Poner un color diferente a cada marcador
-                    markerOptions.icon(getMarkerIcon(marcador.indicador))
-
-                    // 4. Añadir al mapa
-                    googleMap.addMarker(markerOptions)
+            if (historial != null) {
+                if (historial.isNotEmpty()) {
+                    rvHistorial.visibility = View.VISIBLE
+                    adapter.actualizarLista(historial.sortedByDescending { it.fechaGeneracion })
+                } else {
+                    tvListaVacia.visibility = View.VISIBLE
                 }
             } else {
-                Toast.makeText(this@Mapa, "No se pudieron cargar los marcadores", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Historial_invitados, "Error al cargar el historial", Toast.LENGTH_SHORT).show()
+                tvListaVacia.text = "Error de conexión"
+                tvListaVacia.visibility = View.VISIBLE
             }
         }
     }
 
-    // Función para cambiar el color del pin
-    private fun getMarkerIcon(indicador: String): com.google.android.gms.maps.model.BitmapDescriptor {
-        val color = when (indicador.lowercase()) {
-            "peligro" -> BitmapDescriptorFactory.HUE_RED
-            "ayuda" -> BitmapDescriptorFactory.HUE_AZURE
-            "obstaculo" -> BitmapDescriptorFactory.HUE_ORANGE
-            "actividad" -> BitmapDescriptorFactory.HUE_YELLOW
-            else -> BitmapDescriptorFactory.HUE_GREEN
-        }
-        return BitmapDescriptorFactory.defaultMarker(color)
-    }
     private fun setupDrawerHeader() {
         val tvDrawerName = findViewById<TextView>(R.id.tvDrawerUserName)
         val tvDrawerAddress = findViewById<TextView>(R.id.tvDrawerUserAddress)
@@ -176,6 +145,13 @@ class Mapa : AppCompatActivity(), OnMapReadyCallback {
         val btnMenu = findViewById<ImageButton>(R.id.btnMenu)
         btnMenu.setOnClickListener {
             drawerLayout.openDrawer(GravityCompat.START)
+        }
+    }
+
+    private fun setupStatusBar() {
+        window.statusBarColor = Color.parseColor("#F5F5F5")
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightStatusBars = true
         }
     }
 
@@ -213,11 +189,18 @@ class Mapa : AppCompatActivity(), OnMapReadyCallback {
         val llPerfil = findViewById<LinearLayout>(R.id.llPerfilMenu)
         val llCerrarSesion = findViewById<LinearLayout>(R.id.llCerrarSesion)
 
+        fun navigateAndFinish(targetActivity: Class<*>) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+            startActivity(Intent(this, targetActivity))
+            finish()
+        }
+
         fun navigateAndHighlight(targetActivity: Class<*>, activeLayoutId: Int) {
             highlightActiveMenuItem(activeLayoutId)
             drawerLayout.closeDrawer(GravityCompat.START)
-            if (targetActivity != Mapa::class.java) {
+            if (targetActivity != Historial_invitados::class.java) {
                 startActivity(Intent(this, targetActivity))
+                finish()
             }
         }
 

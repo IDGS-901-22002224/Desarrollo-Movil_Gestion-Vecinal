@@ -185,9 +185,9 @@ class Home : AppCompatActivity() {
         llAccesos.setOnClickListener { navigateAndHighlight(Acceso::class.java, R.id.llAccesosMenu) }
         llChat.setOnClickListener { navigateAndHighlight(Chat_vecinal::class.java, R.id.llChatMenu) }
         llMapa.setOnClickListener { navigateAndHighlight(Mapa::class.java, R.id.llMapaMenu) }
-        llPerfil.setOnClickListener { navigateAndHighlight(Perfil::class.java, R.id.llPerfilMenu) }
-        llServicios.setOnClickListener { navigateAndHighlight(Pagos_Servicios::class.java, R.id.llServiciosMenu) }
-        llAvisos.setOnClickListener { navigateAndHighlight(Avisos_vecinales::class.java, R.id.llAvisosMenu) }
+        //llPerfil.setOnClickListener { navigateAndHighlight(Perfil::class.java, R.id.llPerfilMenu) }
+        //llServicios.setOnClickListener { navigateAndHighlight(Pagos_Servicios::class.java, R.id.llServiciosMenu) }
+        //llAvisos.setOnClickListener { navigateAndHighlight(Avisos_vecinales::class.java, R.id.llAvisosMenu) }
 
         // Cerrar sesion
         llCerrarSesion.setOnClickListener {
@@ -258,8 +258,8 @@ class Home : AppCompatActivity() {
         btnAccesos.setOnClickListener { startActivity(Intent(this, Acceso::class.java)) }
         btnChat.setOnClickListener { startActivity(Intent(this, Chat_vecinal::class.java)) }
         btnMapa.setOnClickListener { startActivity(Intent(this, Mapa::class.java)) }
-        btnAvisos.setOnClickListener { startActivity(Intent(this, Avisos_vecinales::class.java)) }
-        btnServicios.setOnClickListener { startActivity(Intent(this, Pagos_Servicios::class.java)) }
+        //btnAvisos.setOnClickListener { startActivity(Intent(this, Avisos_vecinales::class.java)) }
+        //btnServicios.setOnClickListener { startActivity(Intent(this, Pagos_Servicios::class.java)) }
 
         // btnEmergencia.setOnClickListener { startActivity(Intent(this, Emergencia::class.java)) }
     }
