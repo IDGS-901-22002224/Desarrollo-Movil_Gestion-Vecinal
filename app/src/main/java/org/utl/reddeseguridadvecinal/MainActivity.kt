@@ -1,5 +1,6 @@
 package org.utl.reddeseguridadvecinal
 
+<<<<<<< HEAD
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -45,3 +46,21 @@ fun GreetingPreview() {
         Greeting("Android")
     }
 }
+=======
+import android.content.Intent
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Ir directamente a LoginActivity
+        val intent = Intent(this, Login::class.java)
+        startActivity(intent)
+
+        // Cerrar MainActivity para que no quede en el stack
+        finish()
+    }
+}
+>>>>>>> mapa
