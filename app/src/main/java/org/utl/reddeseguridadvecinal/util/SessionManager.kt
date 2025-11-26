@@ -95,4 +95,8 @@ class SessionManager(context: Context) {
     fun clearSession() {
         preferences.edit().clear().apply()
     }
+
+    fun getUsuarioID(): Int {
+        return preferences.getInt(KEY_USER_ID, 0)
+    }
 }
