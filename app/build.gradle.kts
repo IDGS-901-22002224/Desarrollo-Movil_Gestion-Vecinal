@@ -45,6 +45,7 @@ android {
 }
 
 dependencies {
+
     implementation(platform("com.google.firebase:firebase-bom:34.5.0"))
 
     implementation("com.google.firebase:firebase-auth")
@@ -56,6 +57,8 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:21.3.0") // Recomendado para la ubicación del usuario
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation("com.google.zxing:core:3.5.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
+
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")

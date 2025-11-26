@@ -15,31 +15,31 @@
         android:layout_height="wrap_content"
         android:padding="24dp">
 
-        <!-- Icono de alerta -->
+        <!-- Icono de emergencia -->
         <ImageView
-            android:id="@+id/ivIconoAlerta"
+            android:id="@+id/ivIconoEmergencia"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:contentDescription="Alerta"
-            android:src="@drawable/ic_alert_triangle"
+            android:contentDescription="Emergencia"
+            android:src="@drawable/ic_emergency_stop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="#FBBF24" />
+            app:tint="#EF4444" />
 
         <!-- Titulo -->
         <TextView
-            android:id="@+id/tvTituloAlerta"
+            android:id="@+id/tvTituloEmergencia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:fontFamily="@font/inter_bold"
-            android:text="ALERTA"
-            android:textColor="#FBBF24"
+            android:text="EMERGENCIA"
+            android:textColor="#EF4444"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivIconoAlerta" />
+            app:layout_constraintTop_toBottomOf="@id/ivIconoEmergencia" />
 
         <TextView
             android:id="@+id/tvMensajePrincipal"
@@ -48,12 +48,12 @@
             android:layout_marginTop="16dp"
             android:fontFamily="@font/inter_regular"
             android:gravity="center"
-            android:text="¿Seguro que quieres modificar los datos de tu perfil?"
+            android:text="¿Seguro que quieres precionar el boton de panico?"
             android:textColor="#111827"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvTituloAlerta" />
+            app:layout_constraintTop_toBottomOf="@id/tvTituloEmergencia" />
 
         <TextView
             android:id="@+id/tvMensajeSecundario"
@@ -62,7 +62,7 @@
             android:layout_marginTop="8dp"
             android:fontFamily="@font/inter_thin_italic"
             android:gravity="center"
-            android:text="La información se actualizara"
+            android:text="Se le notificara a las autoridades"
             android:textColor="#111827"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -89,7 +89,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                app:cardBackgroundColor="#FBBF24"
+                app:cardBackgroundColor="#EF4444"
                 app:cardCornerRadius="24dp"
                 app:cardElevation="4dp">
 
@@ -123,8 +123,8 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/inter_regular"
                     android:gravity="center"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
+                    android:paddingStart="23dp"
+                    android:paddingEnd="23dp"
                     android:text="Cancelar"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp" />
