@@ -5,7 +5,6 @@ plugins {
     id("com.google.gms.google-services")
 }
 
-
 android {
     namespace = "org.utl.reddeseguridadvecinal"
     compileSdk {
@@ -20,7 +19,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
     }
 
     buildTypes {
@@ -58,7 +56,6 @@ dependencies {
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation("com.google.zxing:core:3.5.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
-
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
