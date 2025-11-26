@@ -5,8 +5,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import kotlin.getValue
 
 object Api {
-    private const val BASE_URL = "http://00.00.00.00:00000/"  // IPv4 para que funcione en el telefono
-    
+    private const val BASE_URL = ""
+
     private val retrofit: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)

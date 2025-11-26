@@ -13,7 +13,6 @@ import retrofit2.http.PUT
 import retrofit2.http.Body
 import retrofit2.http.Path
 
-// Interface interna
 interface UsuarioService {
     @GET("api/usuarios/{id}")
     suspend fun getUsuarioById(@Path("id") id: Int): Response<UsuarioResponse>
