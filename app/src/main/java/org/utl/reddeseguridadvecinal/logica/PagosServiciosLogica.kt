@@ -8,10 +8,11 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import org.utl.reddeseguridadvecinal.controller.PerfilController
 import org.utl.reddeseguridadvecinal.modelo.DatosGraficaPagos
 import org.utl.reddeseguridadvecinal.util.SessionManager
 
-class PagosServiciosLogica {
+class PagosServiciosLogica(private val context: Context) {
 
     fun cerrarSesion(context: Context) {
         val sessionManager = SessionManager(context)
@@ -73,6 +74,21 @@ class PagosServiciosLogica {
                     "(${"%.1f".format(datos.porcentajeServicios)}%)"
         } else {
             "Pagos de servicios: $${"%.2f".format(datos.totalServicios)} (${"%.1f".format(datos.porcentajeServicios)}%)"
+        }
+    }
+
+    // metodo para verificar tarjeta registrada
+    suspend fun verificarTarjetaRegistrada(usuarioId: Int): Boolean {
+        return try {
+            val perfilController = PerfilController(SessionManager(context))
+            val usuario = perfilController.getUsuarioById(usuarioId)
+            val tieneTarjeta = usuario?.numeroTarjeta != null && usuario.numeroTarjeta.isNotEmpty()
+            //println("Verificación tarjeta - Usuario: $usuarioId, Tiene tarjeta: $tieneTarjeta")
+            tieneTarjeta
+        } catch (e: Exception) {
+            //println("Error al verificar tarjeta: ${e.message}")
+            e.printStackTrace()
+            false
         }
     }
 }

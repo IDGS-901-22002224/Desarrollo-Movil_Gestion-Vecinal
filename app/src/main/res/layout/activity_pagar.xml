@@ -106,6 +106,7 @@
 
                     <!-- Este mes -->
                     <TextView
+                        android:id="@+id/tvEsteMesViviendas"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
@@ -117,6 +118,7 @@
 
                     <!-- Adeudos -->
                     <TextView
+                        android:id="@+id/tvAdeudosViviendas"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
@@ -128,6 +130,7 @@
 
                     <!-- Total a pagar -->
                     <TextView
+                        android:id="@+id/tvTotalViviendas"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -162,9 +165,9 @@
                                 android:layout_height="match_parent"
                                 android:fontFamily="@font/inter_regular"
                                 android:gravity="center"
-                                android:paddingStart="20dp"
-                                android:paddingEnd="20dp"
-                                android:text="Confirmar"
+                                android:paddingStart="35dp"
+                                android:paddingEnd="35dp"
+                                android:text="Pagar"
                                 android:textColor="#F8FAFC"
                                 android:textSize="16sp" />
 
@@ -230,6 +233,7 @@
 
                     <!-- Este mes -->
                     <TextView
+                        android:id="@+id/tvEsteMesServicios"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
@@ -241,6 +245,7 @@
 
                     <!-- Adeudos -->
                     <TextView
+                        android:id="@+id/tvAdeudosServicios"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
@@ -252,6 +257,7 @@
 
                     <!-- Total a pagar -->
                     <TextView
+                        android:id="@+id/tvTotalServicios"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -286,9 +292,9 @@
                                 android:layout_height="match_parent"
                                 android:fontFamily="@font/inter_regular"
                                 android:gravity="center"
-                                android:paddingStart="20dp"
-                                android:paddingEnd="20dp"
-                                android:text="Confirmar"
+                                android:paddingStart="35dp"
+                                android:paddingEnd="35dp"
+                                android:text="Pagar"
                                 android:textColor="#F8FAFC"
                                 android:textSize="16sp" />
 

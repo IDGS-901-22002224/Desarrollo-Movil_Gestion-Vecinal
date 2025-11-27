@@ -44,19 +44,22 @@ app/src/main/res/layout/*.xml
 !app/src/main/res/layout/nav_drawer_content.xml
 !app/src/main/res/layout/item_reserva.xml
 !app/src/main/res/layout/item_servicio.xml
+!app/src/main/res/layout/item_cargo_seleccion.xml
+!app/src/main/res/layout/seleccion_cargos.xml
 
 # Solo se suben estos archivos de la carpeta
 app/src/main/java/org/utl/reddeseguridadvecinal/controller/*.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/AmenidadesController.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/CargosServiciosController.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/SolicitarServicioController.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/SolicitarRecintoController.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/PagosServiciosController.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/PagarController.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/HistorialServiciosController.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/HistorialRecintoController.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/ErrorDialogFragment.kt
-!app/src/main/java/org/utl/reddeseguridadvecinal/ConfirmDialogFragment.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/controller/AmenidadesController.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/controller/CargosServiciosController.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/controller/SolicitarServicioController.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/controller/SolicitarRecintoController.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/controller/PagosServiciosController.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/controller/PagarController.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/controller/HistorialServiciosController.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/controller/HistorialRecintoController.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/controller/ErrorDialogFragment.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/controller/ConfirmDialogFragment.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/controller/SeleccionCargosDialogFragment.kt
 
 # Solo se suben estos archivos de la carpeta
 app/src/main/java/org/utl/reddeseguridadvecinal/logica/*.kt
@@ -67,6 +70,13 @@ app/src/main/java/org/utl/reddeseguridadvecinal/logica/*.kt
 
 # Solo se suben estos archivos de la carpeta
 app/src/main/java/org/utl/reddeseguridadvecinal/modelo/*.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/AbonoParcialRequest.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/CargoAbonoDTO.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/CargoMantenimientoDTO.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/DetallePagoRequest.kt
+!app/src/main/java/org/utl/reddeseguridadvecinal/modelo/PagoRegistroRequest.kt
+
+
 !app/src/main/java/org/utl/reddeseguridadvecinal/modelo/AmenidadDTO.kt
 !app/src/main/java/org/utl/reddeseguridadvecinal/modelo/CargoMantenimiento.kt
 !app/src/main/java/org/utl/reddeseguridadvecinal/modelo/CargoServicio.kt

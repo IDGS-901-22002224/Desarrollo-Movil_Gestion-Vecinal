@@ -23,6 +23,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import org.utl.reddeseguridadvecinal.controller.PagosServiciosController
 import org.utl.reddeseguridadvecinal.dialogs.ConfirmDialogFragment
+import org.utl.reddeseguridadvecinal.dialogs.ErrorDialogFragment
 import org.utl.reddeseguridadvecinal.logica.PagosServiciosLogica
 import org.utl.reddeseguridadvecinal.modelo.DatosGraficaPagos
 import org.utl.reddeseguridadvecinal.modelo.DatosMesActual
@@ -56,7 +57,7 @@ class Pagos_Servicios : AppCompatActivity() {
         setContentView(R.layout.activity_pagos_servicios)
 
         sessionManager = SessionManager(this)
-        pagosServiciosLogica = PagosServiciosLogica()
+        pagosServiciosLogica = PagosServiciosLogica(this)
         pagosServiciosController = PagosServiciosController()
 
         flGraficoContainer = findViewById(R.id.flGraficoContainer)
@@ -154,8 +155,7 @@ class Pagos_Servicios : AppCompatActivity() {
 
         //  Pagos
         btnPagos.setOnClickListener {
-            val intent = Intent(this, Pagar::class.java)
-            startActivity(intent)
+            verificarTarjetaYNavegar(Pagar::class.java)
         }
 
         //  Reservas de recintos
@@ -166,8 +166,7 @@ class Pagos_Servicios : AppCompatActivity() {
 
         //  Servicios internos
         btnServiciosInternos.setOnClickListener {
-            val intent = Intent(this, Historial_servicios::class.java)
-            startActivity(intent)
+            verificarTarjetaYNavegar(Historial_servicios::class.java)
         }
 
         fun navigateAndFinish(targetActivity: Class<*>) {
@@ -275,5 +274,44 @@ class Pagos_Servicios : AppCompatActivity() {
 
         textViewVivienda.text = "Pagos de vivienda: $0.00 (0%)"
         textViewServicios.text = "Pagos de servicios: $0.00 (0%)"
+    }
+
+    //Verificar tarjeta antes de navegar
+    private fun verificarTarjetaYNavegar(destino: Class<*>) {
+        lifecycleScope.launch {
+            try {
+                val usuarioId = sessionManager.getUserId()
+                val tieneTarjeta = pagosServiciosLogica.verificarTarjetaRegistrada(usuarioId)
+
+                if (tieneTarjeta) {
+                    // Si tiene tarjeta
+                    val intent = Intent(this@Pagos_Servicios, destino)
+                    startActivity(intent)
+                } else {
+                    // Si NO tiene tarjeta
+                    mostrarErrorTarjetaNoRegistrada()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+
+                mostrarErrorTarjetaNoRegistrada()
+            }
+        }
+    }
+
+    // Modal de error
+    private fun mostrarErrorTarjetaNoRegistrada() {
+        val dialogFragment = ErrorDialogFragment.newInstance(
+            titulo = "TARJETA NO REGISTRADA",
+            mensajePrincipal = "No tienes una tarjeta registrada para realizar pagos",
+            mensajeSecundario = "Debes registrar una tarjeta en tu perfil para poder realizar pagos y abonos",
+            textoBotonAceptar = "Ir a Perfil",
+            onAceptar = {
+                // Navegar a la pantalla de Perfil
+                val intent = Intent(this@Pagos_Servicios, Perfil::class.java)
+                startActivity(intent)
+            }
+        )
+        dialogFragment.show(supportFragmentManager, "ErrorTarjetaDialog")
     }
 }
