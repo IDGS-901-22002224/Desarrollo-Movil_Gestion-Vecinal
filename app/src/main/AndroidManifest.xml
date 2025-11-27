@@ -24,65 +24,84 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RedDeSeguridadVecinal">
 
+<!--
         <meta-data
             android:name=""
             android:value="" />
+        -->
         <activity
             android:name=".Pagar"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".Solicitar_recinto"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".Historial_recinto"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".Solicitar_servicio"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".Historial_servicios"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".Perfil"
+            android:screenOrientation="portrait"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".Pagos_Servicios"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".Realizar_reporte"
+            android:screenOrientation="portrait"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".Reportes"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".Avisos_vecinales"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".Chat_vecinal"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".Registro_invitados"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".Historial_invitados"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".Acceso"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".Mapa"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".Home"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".Login"
+            android:screenOrientation="portrait"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
