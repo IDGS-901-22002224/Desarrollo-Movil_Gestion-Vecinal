@@ -33,5 +33,5 @@ data class InvitadoResponse(
     val fechaEntrada: String?,
     val fechaSalida: String?,
     val codigoQR: String,
-    val activo: Boolean
+    val estado: String
 )

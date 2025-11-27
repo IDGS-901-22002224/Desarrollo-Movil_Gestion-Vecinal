@@ -47,20 +47,32 @@ class InvitadosAdapter(private var invitados: List<InvitadoResponse>) :
         val colorEstado: Int
         val textoEstado: String
 
-        if (!invitado.activo) {
-            colorEstado = Color.parseColor("#EF4444")
-            textoEstado = "Expirado / Cancelado"
-        } else if (invitado.fechaEntrada != null) {
-            // Ya entro
-            colorEstado = Color.parseColor("#10B981") // Verde
-            val horaEntrada = formatearHora(invitado.fechaEntrada)
-            val horaSalida = if (invitado.fechaSalida != null) formatearHora(invitado.fechaSalida) else "--:--"
-            textoEstado = "Entrada: $horaEntrada  |  Salida: $horaSalida"
-        } else {
+        when (invitado.estado) {
 
-            colorEstado = Color.parseColor("#FBBF24") // Amarillo
-            textoEstado = "Pendiente de ingreso"
+            "Expirado" -> {
+                colorEstado = Color.parseColor("#EF4444") // Rojo
+                textoEstado = "Expirado"
+            }
+
+            "Dentro" -> {
+                colorEstado = Color.parseColor("#10B981") // Verde
+                val horaEntrada = formatearHora(invitado.fechaEntrada)
+                textoEstado = "Entrada: $horaEntrada  |  Salida: --:--"
+            }
+
+            "Completado" -> {
+                colorEstado = Color.parseColor("#10B981") // Verde
+                val horaEntrada = formatearHora(invitado.fechaEntrada)
+                val horaSalida = formatearHora(invitado.fechaSalida)
+                textoEstado = "Entrada: $horaEntrada  |  Salida: $horaSalida"
+            }
+
+            else -> { // "Pendiente"
+                colorEstado = Color.parseColor("#FBBF24") // Amarillo
+                textoEstado = "Pendiente de ingreso"
+            }
         }
+
 
         holder.vEstadoColor.setBackgroundColor(colorEstado)
         holder.ivIcono.setColorFilter(colorEstado)
