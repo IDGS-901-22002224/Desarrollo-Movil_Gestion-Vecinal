@@ -32,7 +32,6 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import org.utl.reddeseguridadvecinal.modelo.MensajeChat
 import org.utl.reddeseguridadvecinal.util.SessionManager
-// IMPORTS PARA LA HORA
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -42,29 +41,19 @@ class Chat_vecinal : AppCompatActivity() {
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var btnMenu: ImageButton
     private lateinit var svMensajes: ScrollView
-
-    // Vistas del Chat
     private lateinit var etMensaje: EditText
     private lateinit var btnEnviar: CardView
     private lateinit var llMensajesContainer: LinearLayout
-
-    // Firebase
     private lateinit var database: DatabaseReference
     private var chatListener: ChildEventListener? = null
     private lateinit var chatRef: DatabaseReference
-
-    // Sesión del Usuario
     private lateinit var sessionManager: SessionManager
     private var miUid: String? = null
     private var miNombreUsuario: String? = null
-
-    // Colores de tema
     private val COLOR_ACTIVE_BG = Color.parseColor("#F0FDF4")
     private val COLOR_INACTIVE_BG = Color.WHITE
     private val COLOR_ACTIVE_TEXT = Color.parseColor("#047857")
     private val COLOR_INACTIVE_TEXT = Color.parseColor("#111827")
-
-    // IDs del menú lateral
     private val menuItemsToHighlight = listOf(
         R.id.llInicio,
         R.id.llReportesMenu,
@@ -84,22 +73,17 @@ class Chat_vecinal : AppCompatActivity() {
         setContentView(R.layout.activity_chat_vecinal)
 
         setupStatusBar()
-
-        // Inicializar Sesión
         sessionManager = SessionManager(this)
         miUid = sessionManager.getFirebaseId()
 
-        // --- AQUÍ SE USAN LOS APELLIDOS ---
         miNombreUsuario = sessionManager.getApellidosCompletos()
         if (miNombreUsuario.isNullOrEmpty()) {
             miNombreUsuario = "Usuario Desconocido"
         }
 
-        // Inicializar Firebase RTDB
         database = FirebaseDatabase.getInstance("https://red-seguridad-vecinal-default-rtdb.firebaseio.com/").reference
-        chatRef = database.child("mensajes_chat") // Apuntar al nodo correcto
+        chatRef = database.child("mensajes_chat") 
 
-        // Verificar que el usuario esté logueado
         if (miUid == null || miUid == "") {
             Toast.makeText(this, "Error de sesión, por favor ingresa de nuevo", Toast.LENGTH_LONG).show()
             val intent = Intent(this, Login::class.java).apply {
@@ -107,23 +91,19 @@ class Chat_vecinal : AppCompatActivity() {
             }
             startActivity(intent)
             finish()
-            return // Salir del onCreate
+            return 
         }
 
         initViews()
         setupDrawerMenuButton()
         setupDrawerItemListeners()
 
-        // --- LLAMADA A LA NUEVA FUNCIÓN DEL HEADER ---
         setupDrawerHeader()
 
-        // Resalta el menú activo en "Chat"
         highlightActiveMenuItem(R.id.llChatMenu)
 
-        // Iniciar la lógica del chat
         setupChat()
 
-        // Manejo del botón "atrás" si el menú está abierto
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -141,12 +121,10 @@ class Chat_vecinal : AppCompatActivity() {
         btnMenu = findViewById(R.id.btnMenu)
         svMensajes = findViewById(R.id.svMensajes)
 
-        // Vistas del Chat
         etMensaje = findViewById(R.id.etMensaje)
         btnEnviar = findViewById(R.id.btnEnviar)
         llMensajesContainer = findViewById(R.id.llMensajesContainer)
 
-        // Efecto ripple para ítems del menú
         val typedArray = obtainStyledAttributes(intArrayOf(android.R.attr.selectableItemBackground))
         selectableItemBackground = typedArray.getDrawable(0)
         typedArray.recycle()
@@ -158,67 +136,53 @@ class Chat_vecinal : AppCompatActivity() {
         }
     }
 
-    // --- NUEVA FUNCIÓN PARA EL HEADER DEL MENÚ ---
     private fun setupDrawerHeader() {
-        // 1. Encontrar los TextViews del menú usando los IDs del XML
         val tvDrawerName = findViewById<TextView>(R.id.tvDrawerUserName)
         val tvDrawerAddress = findViewById<TextView>(R.id.tvDrawerUserAddress)
-
-        // 2. Obtener los datos del SessionManager
         val apellidos = sessionManager.getApellidosCompletos()
         val direccion = sessionManager.getDireccionCompleta()
 
-        // 3. Poner los textos
         if (apellidos.isNotEmpty()) {
-            tvDrawerName.text = apellidos // <-- Usamos solo los apellidos
+            tvDrawerName.text = apellidos 
         } else {
-            tvDrawerName.text = "Usuario" // Texto por defecto
+            tvDrawerName.text = "Usuario" 
         }
 
         tvDrawerAddress.text = direccion
     }
 
-    // Configura el envío y la escucha de mensajes
     private fun setupChat() {
-        // Enviar mensaje
         btnEnviar.setOnClickListener {
             enviarMensaje()
         }
 
-        // Escuchar mensajes
         escucharMensajes()
     }
 
-    // --- NUEVA FUNCIÓN PARA FORMATEAR LA HORA ---
     private fun formatTimestamp(timestamp: Long): String {
         return try {
-            // Formato "1:30 PM"
             val sdf = SimpleDateFormat("h:mm a", Locale.getDefault())
             val netDate = Date(timestamp)
             sdf.format(netDate)
         } catch (e: Exception) {
-            "---" // En caso de error
+            "---" 
         }
     }
 
-    // Lógica para enviar el mensaje a Firebase
     private fun enviarMensaje() {
         val textoMensaje = etMensaje.text.toString().trim()
 
         if (textoMensaje.isNotEmpty() && miUid != null && miNombreUsuario != null) {
 
-            // 1. Crear el objeto Mensaje
             val mensaje = MensajeChat(
                 mensaje = textoMensaje,
                 nombre_usuario = miNombreUsuario!!,
                 uid = miUid!!
-                // El timestamp se pondrá solo en Firebase
             )
 
-            // 2. Enviar a Firebase (push() crea un ID único)
             chatRef.push().setValue(mensaje)
                 .addOnSuccessListener {
-                    etMensaje.setText("") // Limpiar el input
+                    etMensaje.setText("") 
                 }
                 .addOnFailureListener { e ->
                     Toast.makeText(this, "Error al enviar: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -226,9 +190,8 @@ class Chat_vecinal : AppCompatActivity() {
         }
     }
 
-    // Lógica para escuchar mensajes de Firebase
     private fun escucharMensajes() {
-        llMensajesContainer.removeAllViews() // Limpiar por si acaso
+        llMensajesContainer.removeAllViews() 
 
         chatListener = object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
@@ -249,52 +212,43 @@ class Chat_vecinal : AppCompatActivity() {
             }
         }
 
-        // Adjunta el listener ordenando por timestamp
         chatRef.orderByChild("timestamp").addChildEventListener(chatListener!!)
     }
 
-    // --- LÓGICA DE PINTAR MENSAJE (ACTUALIZADA CON LA HORA) ---
+
     private fun agregarMensajeALaUI(mensaje: MensajeChat) {
         val inflater = LayoutInflater.from(this)
         val esMio = mensaje.uid == miUid
-
         val vista: View
-
-        // Convertir el timestamp (que es Any) a Long.
-        // Si falla, usa la hora actual como respaldo.
         val timestamp = (mensaje.timestamp as? Long) ?: System.currentTimeMillis()
-        val horaFormateada = formatTimestamp(timestamp) // Llamar a la nueva función
-
+        val horaFormateada = formatTimestamp(timestamp) 
         if (esMio) {
-            // Inflar el layout de mensaje PROPIO
             vista = inflater.inflate(R.layout.item_chat_propio, llMensajesContainer, false)
             val tvMensaje: TextView = vista.findViewById(R.id.tvMensajePropio)
-            val tvHora: TextView = vista.findViewById(R.id.tvHoraPropio) // <-- Buscar el TextView de la hora
+            val tvHora: TextView = vista.findViewById(R.id.tvHoraPropio) 
 
             tvMensaje.text = mensaje.mensaje
-            tvHora.text = horaFormateada // <-- Poner la hora
+            tvHora.text = horaFormateada 
         } else {
-            // Inflar el layout de mensaje OTRO
             vista = inflater.inflate(R.layout.item_chat_otro, llMensajesContainer, false)
             val tvNombre: TextView = vista.findViewById(R.id.tvNombreUsuarioOtro)
             val tvMensaje: TextView = vista.findViewById(R.id.tvMensajeOtro)
-            val tvHora: TextView = vista.findViewById(R.id.tvHoraOtro) // <-- Buscar el TextView de la hora
+            val tvHora: TextView = vista.findViewById(R.id.tvHoraOtro) 
 
             tvNombre.text = mensaje.nombre_usuario
             tvMensaje.text = mensaje.mensaje
-            tvHora.text = horaFormateada // <-- Poner la hora
+            tvHora.text = horaFormateada 
         }
 
         llMensajesContainer.addView(vista)
 
-        // Scroll automático al final
         svMensajes.post {
             svMensajes.fullScroll(View.FOCUS_DOWN)
         }
     }
 
     private fun setupStatusBar() {
-        window.statusBarColor = Color.parseColor("#F5F5F5") // Corregido el color que tenías antes
+        window.statusBarColor = Color.parseColor("#F5F5F5") 
         WindowCompat.getInsetsController(window, window.decorView).apply {
             isAppearanceLightStatusBars = true
         }
@@ -315,11 +269,9 @@ class Chat_vecinal : AppCompatActivity() {
             if (child is LinearLayout && menuItemsToHighlight.contains(child.id)) {
                 val isActive = child.id == activeLayoutId
 
-                // Fondo y ripple
                 child.setBackgroundColor(if (isActive) COLOR_ACTIVE_BG else COLOR_INACTIVE_BG)
                 child.foreground = if (!isActive) selectableItemBackground else null
 
-                // Texto e ícono
                 if (child.childCount >= 2) {
                     val icon = child.getChildAt(0) as ImageView
                     val text = child.getChildAt(1) as TextView
@@ -364,7 +316,6 @@ class Chat_vecinal : AppCompatActivity() {
         llCerrarSesion.setOnClickListener {
             drawerLayout.closeDrawer(GravityCompat.START)
 
-            // Limpiar sesión
             sessionManager.clearSession()
 
             val intent = Intent(this, Login::class.java).apply {
@@ -375,7 +326,6 @@ class Chat_vecinal : AppCompatActivity() {
         }
     }
 
-    // OCULTAR TECLADO AL TOCAR FUERA DEL EDITTEXT
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         currentFocus?.let { view ->
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -385,7 +335,6 @@ class Chat_vecinal : AppCompatActivity() {
         return super.dispatchTouchEvent(ev)
     }
 
-    // IMPORTANTE: Quitar el listener cuando la activity se destruye
     override fun onDestroy() {
         super.onDestroy()
         if (chatListener != null) {
