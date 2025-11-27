@@ -42,7 +42,6 @@ class Reportes : AppCompatActivity() {
     private lateinit var sessionManager: SessionManager
     private val reportesController = ReportesController()
 
-    // Formatos y Colores
     private val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).apply {
         timeZone = TimeZone.getTimeZone("UTC")
     }
@@ -96,7 +95,6 @@ class Reportes : AppCompatActivity() {
     private fun initViews() {
         drawerLayout = findViewById(R.id.drawer_layout)
 
-        // 🔥 Encontrar las vistas por ID
         llReportesContainer = findViewById(R.id.llReportesContainer)
         progressBar = findViewById(R.id.progressBar)
         tvListaVacia = findViewById(R.id.tvListaVacia)
@@ -134,19 +132,14 @@ class Reportes : AppCompatActivity() {
         }
     }
 
-    // 🔥 FUNCIÓN CORREGIDA: Limpia antes de llenar
     private fun llenarListaManual(reportes: List<ReporteResponse>) {
-        // 1. ¡ESTA LÍNEA ES LA CLAVE!
-        // Borra todo lo que había antes para no duplicar
+
         llReportesContainer.removeAllViews()
 
         val inflater = LayoutInflater.from(this)
 
         for (reporte in reportes) {
-            // 2. Inflar el diseño de la tarjeta
             val itemView = inflater.inflate(R.layout.item_reporte, llReportesContainer, false)
-
-            // 3. Referencias
             val vEstadoColor = itemView.findViewById<View>(R.id.vEstadoColor)
             val ivEstadoIcono = itemView.findViewById<ImageView>(R.id.ivEstadoIcono)
             val tvNombreUsuario = itemView.findViewById<TextView>(R.id.tvNombreUsuario)
@@ -157,7 +150,6 @@ class Reportes : AppCompatActivity() {
             val tvReporteTipoLabel = itemView.findViewById<TextView>(R.id.tvReporteTipoLabel)
             val ivReporteImagen = itemView.findViewById<ImageView>(R.id.ivReporteImagen)
 
-            // 4. Llenar datos
             tvNombreUsuario.text = reporte.nombreUsuario
             tvReporteUbicacion.text = reporte.direccionTexto.ifEmpty { "Sin ubicación" }
             tvReporteDescripcion.text = reporte.descripcion
@@ -233,7 +225,6 @@ class Reportes : AppCompatActivity() {
         }
     }
 
-    // ... (Resto de tus funciones de menú y drawers que ya tenías) ...
     private fun setupReporteButtonListener() { findViewById<CardView>(R.id.btnLevantarReporte).setOnClickListener { startActivity(Intent(this, Realizar_reporte::class.java)) } }
     private fun setupDrawerMenuButton() { findViewById<ImageButton>(R.id.btnMenu).setOnClickListener { drawerLayout.openDrawer(GravityCompat.START) } }
     private fun setupDrawerHeader() {
@@ -246,6 +237,6 @@ class Reportes : AppCompatActivity() {
         window.statusBarColor = Color.parseColor("#F5F5F5")
         androidx.core.view.WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
     }
-    private fun highlightActiveMenuItem(id: Int) { /* (Tu lógica de menú) */ }
-    private fun setupDrawerItemListeners() { /* (Tu lógica de listeners) */ }
+    private fun highlightActiveMenuItem(id: Int) { /* (lógica de menú) */ }
+    private fun setupDrawerItemListeners() { /* (lógica de listeners) */ }
 }
