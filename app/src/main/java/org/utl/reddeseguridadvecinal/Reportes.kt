@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -95,11 +96,12 @@ class Reportes : AppCompatActivity() {
 
     private fun initViews() {
         drawerLayout = findViewById(R.id.drawer_layout)
-
-        // 🔥 Encontrar las vistas por ID
         llReportesContainer = findViewById(R.id.llReportesContainer)
-        progressBar = findViewById(R.id.progressBar)
-        tvListaVacia = findViewById(R.id.tvListaVacia)
+
+        try {
+            progressBar = findViewById(R.id.progressBar)
+            tvListaVacia = findViewById(R.id.tvListaVacia)
+        } catch (e: Exception) { }
 
         val typedArray = obtainStyledAttributes(intArrayOf(android.R.attr.selectableItemBackground))
         selectableItemBackground = typedArray.getDrawable(0)
@@ -114,19 +116,22 @@ class Reportes : AppCompatActivity() {
     }
 
     private fun cargarReportes() {
-        progressBar.visibility = View.VISIBLE
-        tvListaVacia.visibility = View.GONE
+        if (::progressBar.isInitialized) progressBar.visibility = View.VISIBLE
+        if (::tvListaVacia.isInitialized) tvListaVacia.visibility = View.GONE
         llReportesContainer.removeAllViews()
 
         lifecycleScope.launch {
             val listaReportes = reportesController.getReportes()
-            progressBar.visibility = View.GONE
+            if (::progressBar.isInitialized) progressBar.visibility = View.GONE
 
             if (listaReportes != null) {
                 if (listaReportes.isNotEmpty()) {
                     llenarListaManual(listaReportes.sortedByDescending { it.fechaCreacion })
                 } else {
-                    tvListaVacia.visibility = View.VISIBLE
+                    if (::tvListaVacia.isInitialized) {
+                        tvListaVacia.visibility = View.VISIBLE
+                        tvListaVacia.text = "No hay reportes"
+                    }
                 }
             } else {
                 Toast.makeText(this@Reportes, "Error de conexión", Toast.LENGTH_SHORT).show()
@@ -134,19 +139,13 @@ class Reportes : AppCompatActivity() {
         }
     }
 
-    // 🔥 FUNCIÓN CORREGIDA: Limpia antes de llenar
     private fun llenarListaManual(reportes: List<ReporteResponse>) {
-        // 1. ¡ESTA LÍNEA ES LA CLAVE!
-        // Borra todo lo que había antes para no duplicar
         llReportesContainer.removeAllViews()
-
         val inflater = LayoutInflater.from(this)
 
         for (reporte in reportes) {
-            // 2. Inflar el diseño de la tarjeta
             val itemView = inflater.inflate(R.layout.item_reporte, llReportesContainer, false)
 
-            // 3. Referencias
             val vEstadoColor = itemView.findViewById<View>(R.id.vEstadoColor)
             val ivEstadoIcono = itemView.findViewById<ImageView>(R.id.ivEstadoIcono)
             val tvNombreUsuario = itemView.findViewById<TextView>(R.id.tvNombreUsuario)
@@ -157,13 +156,11 @@ class Reportes : AppCompatActivity() {
             val tvReporteTipoLabel = itemView.findViewById<TextView>(R.id.tvReporteTipoLabel)
             val ivReporteImagen = itemView.findViewById<ImageView>(R.id.ivReporteImagen)
 
-            // 4. Llenar datos
             tvNombreUsuario.text = reporte.nombreUsuario
             tvReporteUbicacion.text = reporte.direccionTexto.ifEmpty { "Sin ubicación" }
             tvReporteDescripcion.text = reporte.descripcion
             tvReporteFecha.text = formatarFecha(reporte.fechaCreacion)
 
-            // Lógica Visto/No Visto
             if (reporte.visto) {
                 val colorVisto = Color.parseColor("#FBBF24")
                 vEstadoColor.setBackgroundColor(colorVisto)
@@ -176,13 +173,11 @@ class Reportes : AppCompatActivity() {
                 ivEstadoIcono.setColorFilter(colorNoVisto)
             }
 
-            // Lógica Tipo y Color
             val (colorFondo, colorTexto) = getColorForTipo(reporte.tipoReporteID)
             tvReporteTipoLabel.text = getNombreTipoPorId(reporte.tipoReporteID)
             cvReporteTipoContainer.setCardBackgroundColor(Color.parseColor(colorFondo))
             tvReporteTipoLabel.setTextColor(Color.parseColor(colorTexto))
 
-            // Lógica Imagen
             if (!reporte.imagenBase64.isNullOrEmpty()) {
                 try {
                     val base64Clean = reporte.imagenBase64.split(",").last()
@@ -197,7 +192,6 @@ class Reportes : AppCompatActivity() {
                 ivReporteImagen.visibility = View.GONE
             }
 
-            // 5. Agregar la tarjeta al contenedor
             llReportesContainer.addView(itemView)
         }
     }
@@ -233,19 +227,85 @@ class Reportes : AppCompatActivity() {
         }
     }
 
-    // ... (Resto de tus funciones de menú y drawers que ya tenías) ...
-    private fun setupReporteButtonListener() { findViewById<CardView>(R.id.btnLevantarReporte).setOnClickListener { startActivity(Intent(this, Realizar_reporte::class.java)) } }
-    private fun setupDrawerMenuButton() { findViewById<ImageButton>(R.id.btnMenu).setOnClickListener { drawerLayout.openDrawer(GravityCompat.START) } }
+    private fun setupReporteButtonListener() {
+        findViewById<CardView>(R.id.btnLevantarReporte).setOnClickListener { startActivity(Intent(this, Realizar_reporte::class.java)) }
+    }
+
     private fun setupDrawerHeader() {
         val tvDrawerName = findViewById<TextView>(R.id.tvDrawerUserName)
         val tvDrawerAddress = findViewById<TextView>(R.id.tvDrawerUserAddress)
         if (sessionManager.getApellidosCompletos().isNotEmpty()) tvDrawerName.text = sessionManager.getApellidosCompletos() else tvDrawerName.text = "Usuario"
         tvDrawerAddress.text = sessionManager.getDireccionCompleta()
     }
+
+    private fun setupDrawerMenuButton() {
+        findViewById<ImageButton>(R.id.btnMenu).setOnClickListener { drawerLayout.openDrawer(GravityCompat.START) }
+    }
+
     private fun setupStatusBar() {
         window.statusBarColor = Color.parseColor("#F5F5F5")
         androidx.core.view.WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
     }
-    private fun highlightActiveMenuItem(id: Int) { /* (Tu lógica de menú) */ }
-    private fun setupDrawerItemListeners() { /* (Tu lógica de listeners) */ }
+
+    private fun highlightActiveMenuItem(activeLayoutId: Int) {
+        val navDrawerContent = findViewById<LinearLayout>(R.id.nav_drawer_content)
+        val menuContainer = navDrawerContent.getChildAt(1) as LinearLayout
+
+        for (i in 0 until menuContainer.childCount) {
+            val child = menuContainer.getChildAt(i)
+            if (child is LinearLayout && menuItemsToHighlight.contains(child.id)) {
+                val isActive = child.id == activeLayoutId
+                child.setBackgroundColor(if (isActive) COLOR_ACTIVE_BG else COLOR_INACTIVE_BG)
+                child.foreground = if (!isActive) selectableItemBackground else null
+                if (child.childCount >= 2) {
+                    val icon = child.getChildAt(0) as ImageView
+                    val text = child.getChildAt(1) as TextView
+                    val textColor = if (isActive) COLOR_ACTIVE_TEXT else COLOR_INACTIVE_TEXT
+                    icon.setColorFilter(textColor)
+                    text.setTextColor(textColor)
+                    text.setTypeface(null, if (isActive) Typeface.BOLD else Typeface.NORMAL)
+                }
+            }
+        }
+    }
+
+    private fun setupDrawerItemListeners() {
+        val llInicio = findViewById<LinearLayout>(R.id.llInicio)
+        val llReportes = findViewById<LinearLayout>(R.id.llReportesMenu)
+        val llAccesos = findViewById<LinearLayout>(R.id.llAccesosMenu)
+        val llChat = findViewById<LinearLayout>(R.id.llChatMenu)
+        val llMapa = findViewById<LinearLayout>(R.id.llMapaMenu)
+        val llServicios = findViewById<LinearLayout>(R.id.llServiciosMenu)
+        val llAvisos = findViewById<LinearLayout>(R.id.llAvisosMenu)
+        val llPerfil = findViewById<LinearLayout>(R.id.llPerfilMenu)
+        val llCerrarSesion = findViewById<LinearLayout>(R.id.llCerrarSesion)
+
+        fun navigateAndHighlight(targetActivity: Class<*>) {
+            if (targetActivity != Reportes::class.java) {
+                startActivity(Intent(this, targetActivity))
+                finish()
+            } else {
+                drawerLayout.closeDrawer(GravityCompat.START)
+            }
+        }
+
+        llInicio.setOnClickListener { navigateAndHighlight(Home::class.java) }
+        llReportes.setOnClickListener { navigateAndHighlight(Reportes::class.java) }
+        llAccesos.setOnClickListener { navigateAndHighlight(Acceso::class.java) }
+        llChat.setOnClickListener { navigateAndHighlight(Chat_vecinal::class.java) }
+        llMapa.setOnClickListener { navigateAndHighlight(Mapa::class.java) }
+        llServicios.setOnClickListener { navigateAndHighlight(Pagos_Servicios::class.java) }
+        llAvisos.setOnClickListener { navigateAndHighlight(Avisos_vecinales::class.java) }
+        llPerfil.setOnClickListener { navigateAndHighlight(Perfil::class.java) }
+
+        llCerrarSesion.setOnClickListener {
+            drawerLayout.closeDrawer(GravityCompat.START)
+            sessionManager.clearSession()
+            val intent = Intent(this, Login::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            startActivity(intent)
+            finish()
+        }
+    }
 }

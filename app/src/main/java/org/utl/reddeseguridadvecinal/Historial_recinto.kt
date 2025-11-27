@@ -188,7 +188,7 @@ class Historial_recinto : AppCompatActivity() {
                 ivIcono.setImageResource(R.drawable.ic_close_circle)
                 ivIcono.setColorFilter(Color.parseColor("#EF4444"))
             }
-            "aceptada" -> {
+            "aprobada" -> {
                 ivIcono.setImageResource(R.drawable.ic_check)
                 ivIcono.setColorFilter(Color.parseColor("#10B981"))
             }

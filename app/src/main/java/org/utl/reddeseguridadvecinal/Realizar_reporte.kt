@@ -2,12 +2,12 @@ package org.utl.reddeseguridadvecinal
 
 import android.Manifest
 import android.app.Activity
-import android.app.Dialog // 🔥 Necesario para el modal
+import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Typeface
-import android.graphics.drawable.ColorDrawable // 🔥 Necesario para el modal
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.location.Location
 import android.net.Uri
@@ -49,10 +49,12 @@ import org.utl.reddeseguridadvecinal.controller.ReportesController
 import org.utl.reddeseguridadvecinal.modelo.ReporteRequest
 import org.utl.reddeseguridadvecinal.modelo.TipoReporteResponse
 import org.utl.reddeseguridadvecinal.util.SessionManager
+import java.io.ByteArrayOutputStream
 
 class Realizar_reporte : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
+    private var selectableItemBackground: Drawable? = null
 
     private lateinit var switchAnonimo: SwitchCompat
     private lateinit var etNombre: EditText
@@ -195,6 +197,12 @@ class Realizar_reporte : AppCompatActivity() {
     }
     private fun initViews() {
         drawerLayout = findViewById(R.id.drawer_layout)
+
+        // Inicializar fondo seleccionable
+        val typedArray = obtainStyledAttributes(intArrayOf(android.R.attr.selectableItemBackground))
+        selectableItemBackground = typedArray.getDrawable(0)
+        typedArray.recycle()
+
         switchAnonimo = findViewById(R.id.switchAnonimo)
         etNombre = findViewById(R.id.etNombre)
         etUbicacion = findViewById(R.id.etUbicacion)
@@ -203,6 +211,12 @@ class Realizar_reporte : AppCompatActivity() {
         btnGuardar = findViewById(R.id.btnGuardar)
         btnAdjuntar = findViewById(R.id.btnAdjuntar)
         tvEvidenciaPlaceholder = findViewById(R.id.tvEvidenciaPlaceholder)
+
+        // Configurar boton cancelar
+        findViewById<CardView>(R.id.btnCancelar).setOnClickListener {
+            hideKeyboard()
+            finish()
+        }
     }
     private fun setupGalleryLauncher() {
         galleryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -304,6 +318,65 @@ class Realizar_reporte : AppCompatActivity() {
         window.statusBarColor = Color.parseColor("#F5F5F5")
         WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
     }
-    private fun highlightActiveMenuItem(id: Int) {}
-    private fun setupDrawerItemListeners() {}
+
+    private fun highlightActiveMenuItem(activeLayoutId: Int) {
+        val navDrawerContent = findViewById<LinearLayout>(R.id.nav_drawer_content)
+        val menuContainer = navDrawerContent.getChildAt(1) as LinearLayout
+        for (i in 0 until menuContainer.childCount) {
+            val child = menuContainer.getChildAt(i)
+            if (child is LinearLayout && menuItemsToHighlight.contains(child.id)) {
+                val isActive = child.id == activeLayoutId
+                child.setBackgroundColor(if (isActive) COLOR_ACTIVE_BG else COLOR_INACTIVE_BG)
+                child.foreground = if (!isActive) selectableItemBackground else null
+                if (child.childCount >= 2) {
+                    val icon = child.getChildAt(0) as ImageView
+                    val text = child.getChildAt(1) as TextView
+                    val textColor = if (isActive) COLOR_ACTIVE_TEXT else COLOR_INACTIVE_TEXT
+                    icon.setColorFilter(textColor)
+                    text.setTextColor(textColor)
+                    text.setTypeface(null, if (isActive) Typeface.BOLD else Typeface.NORMAL)
+                }
+            }
+        }
+    }
+
+    private fun setupDrawerItemListeners() {
+        val llInicio = findViewById<LinearLayout>(R.id.llInicio)
+        val llReportes = findViewById<LinearLayout>(R.id.llReportesMenu)
+        val llAccesos = findViewById<LinearLayout>(R.id.llAccesosMenu)
+        val llChat = findViewById<LinearLayout>(R.id.llChatMenu)
+        val llMapa = findViewById<LinearLayout>(R.id.llMapaMenu)
+        val llServicios = findViewById<LinearLayout>(R.id.llServiciosMenu)
+        val llAvisos = findViewById<LinearLayout>(R.id.llAvisosMenu)
+        val llPerfil = findViewById<LinearLayout>(R.id.llPerfilMenu)
+        val llCerrarSesion = findViewById<LinearLayout>(R.id.llCerrarSesion)
+
+        fun navigateAndHighlight(targetActivity: Class<*>, activeLayoutId: Int) {
+            highlightActiveMenuItem(activeLayoutId)
+            drawerLayout.closeDrawer(GravityCompat.START)
+            if (targetActivity != Realizar_reporte::class.java) {
+                startActivity(Intent(this, targetActivity))
+                finish()
+            }
+        }
+
+        llInicio.setOnClickListener { navigateAndHighlight(Home::class.java, R.id.llInicio) }
+        llReportes.setOnClickListener { navigateAndHighlight(Reportes::class.java, R.id.llReportesMenu) }
+        llAccesos.setOnClickListener { navigateAndHighlight(Acceso::class.java, R.id.llAccesosMenu) }
+        llChat.setOnClickListener { navigateAndHighlight(Chat_vecinal::class.java, R.id.llChatMenu) }
+        llMapa.setOnClickListener { navigateAndHighlight(Mapa::class.java, R.id.llMapaMenu) }
+        llServicios.setOnClickListener { navigateAndHighlight(Pagos_Servicios::class.java, R.id.llServiciosMenu) }
+        llAvisos.setOnClickListener { navigateAndHighlight(Avisos_vecinales::class.java, R.id.llAvisosMenu) }
+        llPerfil.setOnClickListener { navigateAndHighlight(Perfil::class.java, R.id.llPerfilMenu) }
+
+        llCerrarSesion.setOnClickListener {
+            drawerLayout.closeDrawer(GravityCompat.START)
+            sessionManager.clearSession()
+            val intent = Intent(this, Login::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            startActivity(intent)
+            finish()
+        }
+    }
 }
