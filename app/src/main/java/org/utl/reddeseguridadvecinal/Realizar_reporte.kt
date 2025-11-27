@@ -2,12 +2,12 @@ package org.utl.reddeseguridadvecinal
 
 import android.Manifest
 import android.app.Activity
-import android.app.Dialog // 🔥 Necesario para el modal
+import android.app.Dialog 
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Typeface
-import android.graphics.drawable.ColorDrawable // 🔥 Necesario para el modal
+import android.graphics.drawable.ColorDrawable 
 import android.graphics.drawable.Drawable
 import android.location.Location
 import android.net.Uri
