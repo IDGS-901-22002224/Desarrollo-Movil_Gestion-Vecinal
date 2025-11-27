@@ -21,7 +21,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import org.utl.reddeseguridadvecinal.controller.AccesosController
-import org.utl.reddeseguridadvecinal.util.QRGenerator // 🔥 Nuestra utilidad
+import org.utl.reddeseguridadvecinal.util.QRGenerator 
 import org.utl.reddeseguridadvecinal.util.SessionManager
 import java.text.SimpleDateFormat
 import java.util.Locale
