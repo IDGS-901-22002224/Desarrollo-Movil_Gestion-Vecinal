@@ -116,25 +116,28 @@ class Reportes : AppCompatActivity() {
     }
 
     private fun cargarReportes() {
-        if (::progressBar.isInitialized) progressBar.visibility = View.VISIBLE
-        if (::tvListaVacia.isInitialized) tvListaVacia.visibility = View.GONE
+        val miId = sessionManager.getUserId()
+
+        progressBar.visibility = View.VISIBLE
+        tvListaVacia.visibility = View.GONE
         llReportesContainer.removeAllViews()
 
         lifecycleScope.launch {
-            val listaReportes = reportesController.getReportes()
-            if (::progressBar.isInitialized) progressBar.visibility = View.GONE
+            val misReportes = reportesController.getReportesPorUsuario(miId)
 
-            if (listaReportes != null) {
-                if (listaReportes.isNotEmpty()) {
-                    llenarListaManual(listaReportes.sortedByDescending { it.fechaCreacion })
+            progressBar.visibility = View.GONE
+
+            if (misReportes != null) {
+                if (misReportes.isNotEmpty()) {
+                    llenarListaManual(misReportes.sortedByDescending { it.fechaCreacion })
                 } else {
-                    if (::tvListaVacia.isInitialized) {
-                        tvListaVacia.visibility = View.VISIBLE
-                        tvListaVacia.text = "No hay reportes"
-                    }
+                    tvListaVacia.visibility = View.VISIBLE
+                    tvListaVacia.text = "No has realizado reportes"
                 }
             } else {
                 Toast.makeText(this@Reportes, "Error de conexión", Toast.LENGTH_SHORT).show()
+                tvListaVacia.visibility = View.VISIBLE
+                tvListaVacia.text = "Error al cargar"
             }
         }
     }
