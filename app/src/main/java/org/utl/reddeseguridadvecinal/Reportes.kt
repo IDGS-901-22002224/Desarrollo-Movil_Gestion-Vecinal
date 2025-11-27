@@ -36,7 +36,7 @@ class Reportes : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
 
-    // 🔥 VARIABLES DE VISTA (Coinciden con el XML corregido)
+
     private lateinit var llReportesContainer: LinearLayout
     private lateinit var progressBar: ProgressBar
     private lateinit var tvListaVacia: TextView
@@ -98,7 +98,7 @@ class Reportes : AppCompatActivity() {
     private fun initViews() {
         drawerLayout = findViewById(R.id.drawer_layout)
 
-        // 🔥 Encontrar las vistas por ID
+
         llReportesContainer = findViewById(R.id.llReportesContainer)
         progressBar = findViewById(R.id.progressBar)
         tvListaVacia = findViewById(R.id.tvListaVacia)
@@ -136,7 +136,7 @@ class Reportes : AppCompatActivity() {
         }
     }
 
-    // 🔥 FUNCIÓN CORREGIDA: Limpia antes de llenar
+
     private fun llenarListaManual(reportes: List<ReporteResponse>) {
         // 1. ¡ESTA LÍNEA ES LA CLAVE!
         // Borra todo lo que había antes para no duplicar
