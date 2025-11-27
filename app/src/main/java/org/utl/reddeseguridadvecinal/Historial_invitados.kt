@@ -82,7 +82,7 @@ class Historial_invitados : AppCompatActivity() {
 
         setupDrawerMenuButton()
         setupDrawerItemListeners()
-        setupDrawerHeader() // 🔥 Agregar header
+        setupDrawerHeader()
         highlightActiveMenuItem(R.id.llAccesosMenu)
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
