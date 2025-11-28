@@ -25,3 +25,8 @@
 | Funcionalidad completa de los submodulos de solicitar servicios y amenidades | Android Studio | Se realizon los submodulos completos de solicitar servicios y solicitar amenidades junto con los modales necesarios. | 19/11/22025 |
 | Funcionalidad completa de los submodulos de historial servicios y amenidades | Android Studio | Se realizon los submodulos completos de historial servicios e historial amenidades. | 20/11/22025 |
 | Funcionalidad completa del modulo princial tipo dashboard de cargos | Android Studio | Se realizon la funcionalidad completa del dashboard en el apartado principal del modulo de servicios el cual permite ver de mejor manera la informacion de los cargos del mes | 21/11/22025 |
+| Funcionalidad completa de pagos y servicios | Android Studio  | Se reazlizaron mockups minimalistas para tener una mejor idea visual de como quedara cada modulo. | 25/11/22025 |
+| Pruebas con el backend y la base de datos local | Android Studio, SQL Server FireBase  | Se realizaron las ultimas pruebas para comporbar que todo funciona como deberia de manera loca. | 25/11/22025 |
+| Pruebas con el backend y la base de datos desplegada | Android Studio, Azure, FireBase  | Se realizaron pruebas con el backend desplegado para comporbar que todo funciona como deberia. | 26/11/22025 |
+| Producción | Android Studio, Azure, FireBase, GitHub  | Se realizaron el depliegue a producción. | 27/11/22025 |
+| Monitoreo | Android Studio, Azure, FireBase, GitHub  | Se realizaron monitoreo y confirmacion de que todo esta bien en producción. | 27/11/22025 |
