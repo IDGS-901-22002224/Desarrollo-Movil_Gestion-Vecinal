@@ -1,4 +1,25 @@
-# Desarrollo-Movil_Gestion-Vecinal
+# Red de Seguridad Vecinal - App Residentes
+
+Aplicación móvil nativa para Android enfocada en la seguridad y comodidad de los residentes.
+
+## Partes del proyecto:
+* **Frontend:** https://github.com/Oscar-Gomez-Luna/Red-Seguridad-Vecinal-Frontend
+* **Backend:** https://github.com/Oscar-Gomez-Luna/Red-Seguridad-Vecinal-Backend
+
+## Documentación del Proyecto
+Puedes consultar el documento técnico completo aquí:
+ **[Documento Final - Red de Seguridad Vecinal.pdf](https://github.com/Oscar-Gomez-Luna/Red-Seguridad-Vecinal-Frontend/blob/master/Documento%20Final%20-%20Red%20de%20Seguridad%20Vecinal.pdf)**
+
+## Tecnologías
+* **Lenguaje:** Kotlin
+* **Plataforma:** Android Nativo
+* **Servicios:** Firebase (Auth, Realtime DB, Mapa de google)
+
+## Funcionalidades Clave
+* **Botón de Pánico:** Alerta inmediata con ubicación GPS automática.
+* **Acceso QR:** Generación de invitaciones temporales con código QR.
+* **Comunidad:** Chat vecinal moderado y reportes con evidencia multimedia.
+* **Servicios:** Reserva de amenidades y consulta de estado de cuenta.
 
 | Actividad | Se utilizo | Descripcción | Fecha |
 |-----------|--------------|--------------|---------|
