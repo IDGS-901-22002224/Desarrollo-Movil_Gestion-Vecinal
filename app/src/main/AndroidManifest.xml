@@ -25,6 +25,7 @@
         android:theme="@style/Theme.RedDeSeguridadVecinal">
 
 <!--
+        -- CREDENCIALES PARA GOOGLE MAP
         <meta-data
             android:name=""
             android:value="" />
